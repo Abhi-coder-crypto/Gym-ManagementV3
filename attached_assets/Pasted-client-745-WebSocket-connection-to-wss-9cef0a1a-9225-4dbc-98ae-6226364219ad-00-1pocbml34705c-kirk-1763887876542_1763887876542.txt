@@ -1,0 +1,93 @@
+client:745 WebSocket connection to 'wss://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/?token=Nk6fetmNQiJu' failed: 
+createConnection @ client:745
+chunk-E22KYI7D.js?v=c51c7109:21609 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+client:755 WebSocket connection to 'wss://localhost:5173/?token=Nk6fetmNQiJu' failed: 
+createConnection @ client:755
+client:765 [vite] failed to connect to websocket.
+your current setup:
+  (browser) 9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev:/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr .
+connect @ client:765
+client-workouts.tsx:160 Uncaught TypeError: workout.exercises.map is not a function
+    at client-workouts.tsx:160:54
+    at Array.map (<anonymous>)
+    at ClientWorkouts (client-workouts.tsx:117:39)
+    at renderWithHooks (chunk-E22KYI7D.js?v=c51c7109:11596:26)
+    at updateFunctionComponent (chunk-E22KYI7D.js?v=c51c7109:14630:28)
+    at beginWork (chunk-E22KYI7D.js?v=c51c7109:15972:22)
+    at HTMLUnknownElement.callCallback2 (chunk-E22KYI7D.js?v=c51c7109:3680:22)
+    at Object.invokeGuardedCallbackDev (chunk-E22KYI7D.js?v=c51c7109:3705:24)
+    at invokeGuardedCallback (chunk-E22KYI7D.js?v=c51c7109:3739:39)
+    at beginWork$1 (chunk-E22KYI7D.js?v=c51c7109:19818:15)
+client-workouts.tsx:160 Uncaught TypeError: workout.exercises.map is not a function
+    at client-workouts.tsx:160:54
+    at Array.map (<anonymous>)
+    at ClientWorkouts (client-workouts.tsx:117:39)
+    at renderWithHooks (chunk-E22KYI7D.js?v=c51c7109:11596:26)
+    at updateFunctionComponent (chunk-E22KYI7D.js?v=c51c7109:14630:28)
+    at beginWork (chunk-E22KYI7D.js?v=c51c7109:15972:22)
+    at HTMLUnknownElement.callCallback2 (chunk-E22KYI7D.js?v=c51c7109:3680:22)
+    at Object.invokeGuardedCallbackDev (chunk-E22KYI7D.js?v=c51c7109:3705:24)
+    at invokeGuardedCallback (chunk-E22KYI7D.js?v=c51c7109:3739:39)
+    at beginWork$1 (chunk-E22KYI7D.js?v=c51c7109:19818:15)
+chunk-E22KYI7D.js?v=c51c7109:14080 The above error occurred in the <ClientWorkouts> component:
+
+    at ClientWorkouts (https://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/src/pages/client-workouts.tsx:26:89)
+    at Route (https://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c51c7109:322:16)
+    at Switch (https://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c51c7109:378:17)
+    at Router
+    at Provider (https://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-M7N4426V.js?v=c51c7109:37:15)
+    at TooltipProvider (https://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=c51c7109:64:5)
+    at LanguageProvider (https://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/src/lib/language-context.tsx:856:36)
+    at QueryClientProvider (https://9cef0a1a-9225-4dbc-98ae-6226364219ad-00-1pocbml34705c.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=c51c7109:2747:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-E22KYI7D.js?v=c51c7109:14080
+chunk-E22KYI7D.js?v=c51c7109:9176 Uncaught TypeError: workout.exercises.map is not a function
+    at client-workouts.tsx:160:54
+    at Array.map (<anonymous>)
+    at ClientWorkouts (client-workouts.tsx:117:39)
+    at renderWithHooks (chunk-E22KYI7D.js?v=c51c7109:11596:26)
+    at updateFunctionComponent (chunk-E22KYI7D.js?v=c51c7109:14630:28)
+    at beginWork (chunk-E22KYI7D.js?v=c51c7109:15972:22)
+    at beginWork$1 (chunk-E22KYI7D.js?v=c51c7109:19806:22)
+    at performUnitOfWork (chunk-E22KYI7D.js?v=c51c7109:19251:20)
+    at workLoopSync (chunk-E22KYI7D.js?v=c51c7109:19190:13)
+    at renderRootSync (chunk-E22KYI7D.js?v=c51c7109:19169:15)
+client:809 [vite] TypeError: Cannot read properties of undefined (reading 'send')
+    at Object.send (client:449:7)
+    at Object.send (client:780:16)
+    at Object.send (client:318:23)
+    at Object.send (client:396:30)
+    at HMRClient.send (client:157:18)
+    at HMRContext.send (client:119:18)
+    at sendError (workouts:16:7)
+    at workouts:20:3
+    at Object.invokeGuardedCallbackDev (chunk-E22KYI7D.js?v=c51c7109:3705:24)
+    at invokeGuardedCallback (chunk-E22KYI7D.js?v=c51c7109:3739:39)
+error @ client:809
+client:809 [vite] TypeError: Cannot read properties of undefined (reading 'send')
+    at Object.send (client:449:7)
+    at Object.send (client:780:16)
+    at Object.send (client:318:23)
+    at Object.send (client:396:30)
+    at HMRClient.send (client:157:18)
+    at HMRContext.send (client:119:18)
+    at sendError (workouts:16:7)
+    at workouts:20:3
+    at Object.invokeGuardedCallbackDev (chunk-E22KYI7D.js?v=c51c7109:3705:24)
+    at invokeGuardedCallback (chunk-E22KYI7D.js?v=c51c7109:3739:39)
+error @ client:809
+client:809 [vite] TypeError: Cannot read properties of undefined (reading 'send')
+    at Object.send (client:449:7)
+    at Object.send (client:780:16)
+    at Object.send (client:318:23)
+    at Object.send (client:396:30)
+    at HMRClient.send (client:157:18)
+    at HMRContext.send (client:119:18)
+    at sendError (workouts:16:7)
+    at workouts:20:3
+error @ client:809
