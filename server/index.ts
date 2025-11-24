@@ -254,6 +254,67 @@ app.use((req, res, next) => {
         }
         log(`📅 Created ${sessions.length} demo live sessions`);
       }
+      
+      // Seed demo clients assigned to trainer if none exist
+      const existingClients = await storage.getAllClients();
+      if (existingClients.length === 0) {
+        const packages = await storage.getAllPackages();
+        const premiumPackage = packages.find(p => p.name === 'Premium');
+        
+        // Create demo clients
+        const demoClients = [
+          { name: 'John Smith', phone: '1234567890', email: 'john@example.com', packageId: premiumPackage?._id?.toString(), trainerId: demoTrainer._id?.toString(), status: 'active' },
+          { name: 'Sarah Johnson', phone: '2345678901', email: 'sarah@example.com', packageId: premiumPackage?._id?.toString(), trainerId: demoTrainer._id?.toString(), status: 'active' },
+          { name: 'Mike Davis', phone: '3456789012', email: 'mike@example.com', packageId: premiumPackage?._id?.toString(), trainerId: demoTrainer._id?.toString(), status: 'active' },
+          { name: 'Emma Wilson', phone: '4567890123', email: 'emma@example.com', packageId: premiumPackage?._id?.toString(), trainerId: demoTrainer._id?.toString(), status: 'active' },
+        ];
+        
+        const createdClients = [];
+        for (const clientData of demoClients) {
+          const client = await storage.createClient(clientData);
+          createdClients.push(client);
+        }
+        log(`👥 Created ${createdClients.length} demo clients assigned to trainer`);
+        
+        // Create demo diet plans for clients
+        for (const client of createdClients) {
+          const dietPlan = await storage.createDietPlan({
+            clientId: client._id?.toString(),
+            name: 'Weekly Nutrition Plan',
+            description: 'Balanced diet for weight loss and muscle gain',
+            meals: {
+              Monday: [{ mealType: 'breakfast', description: 'Oatmeal with berries', calories: 350 }],
+              Tuesday: [{ mealType: 'breakfast', description: 'Eggs and whole wheat toast', calories: 400 }],
+              Wednesday: [{ mealType: 'breakfast', description: 'Smoothie bowl', calories: 380 }],
+            },
+            selectedDay: 'Monday',
+          });
+          log(`🥗 Created diet plan for client: ${client.name}`);
+        }
+        
+        // Create demo workout plans for clients
+        for (const client of createdClients) {
+          const workoutPlan = await storage.createWorkoutPlan({
+            clientId: client._id?.toString(),
+            trainerId: demoTrainer._id?.toString(),
+            name: 'Full Body Strength',
+            description: 'Complete strength training program',
+            exercises: {
+              Monday: [
+                { name: 'Squats', sets: 4, reps: 8, weight: 185, notes: 'Heavy load' },
+                { name: 'Bench Press', sets: 4, reps: 6, weight: 225, notes: 'Focus on form' },
+              ],
+              Wednesday: [
+                { name: 'Deadlifts', sets: 3, reps: 5, weight: 315, notes: 'Power day' },
+              ],
+              Friday: [
+                { name: 'Pull-ups', sets: 3, reps: 10, weight: null, notes: 'Bodyweight' },
+              ],
+            },
+          });
+          log(`💪 Created workout plan for client: ${client.name}`);
+        }
+      }
   } catch (error) {
     log("❌ Failed to connect to database:");
     console.error(error);
