@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { ArrowLeft, Eye, EyeOff, KeyRound, Lock } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, KeyRound, Lock, User } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import backgroundImage from "@assets/cleint_login_1763960397741.jpg";
 import logoImage from "@assets/TWWLOGO_1763965276890.png";
@@ -101,7 +101,7 @@ export default function ClientAccess() {
             <Button
               variant="ghost"
               className="text-white hover:text-white/80"
-              onClick={() => setLocation("/")}
+              onClick={() => window.history.back()}
               data-testid="button-back-home"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -114,17 +114,20 @@ export default function ClientAccess() {
 
       <main className="relative z-10 min-h-screen flex items-center justify-center px-6">
         <Card className="w-full max-w-sm shadow-lg">
-          <CardHeader className="space-y-2 pb-3">
+          <CardHeader className="space-y-2 pb-2">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto">
+              <User className="h-6 w-6 text-blue-600" />
+            </div>
             <div className="text-center">
               <CardTitle className="text-xl font-display">Client Login</CardTitle>
-              <CardDescription className="text-xs mt-1">
+              <CardDescription className="text-xs mt-0.5">
                 Access your fitness dashboard
               </CardDescription>
             </div>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLoginSubmit} className="space-y-3">
-              <div className="space-y-1.5">
+            <form onSubmit={handleLoginSubmit} className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="login-email" className="text-sm">Email</Label>
                 <Input
                   id="login-email"
@@ -136,7 +139,7 @@ export default function ClientAccess() {
                   className="text-sm h-9"
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <Label htmlFor="login-password" className="text-sm">Password</Label>
                 <div className="relative">
                   <Input
