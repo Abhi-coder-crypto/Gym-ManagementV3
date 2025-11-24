@@ -35,9 +35,15 @@ export default function TrainerDiet() {
     enabled: !!trainerId
   });
 
-  // Fetch trainer's diet plans (only for assigned clients)
+  // Fetch trainer's diet plans + admin templates (shared)
   const { data: dietPlans = [], isLoading: isLoadingPlans, refetch: refetchPlans } = useQuery<DietPlan[]>({
     queryKey: ['/api/trainers', trainerId, 'diet-plans'],
+    enabled: !!trainerId
+  });
+
+  // Fetch trainer's workout plans + admin templates (shared)
+  const { data: workoutPlans = [], isLoading: isLoadingWorkouts, refetch: refetchWorkouts } = useQuery<any[]>({
+    queryKey: ['/api/trainers', trainerId, 'workout-plans'],
     enabled: !!trainerId
   });
 
@@ -181,11 +187,15 @@ export default function TrainerDiet() {
 
           <main className="flex-1 overflow-auto p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10">
             <div className="max-w-7xl mx-auto">
-              <Tabs defaultValue="plans" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="plans" data-testid="tab-diet-plans">
+              <Tabs defaultValue="diet" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-6">
+                  <TabsTrigger value="diet" data-testid="tab-diet-plans">
                     <UtensilsCrossed className="h-4 w-4 mr-2" />
                     Diet Plans
+                  </TabsTrigger>
+                  <TabsTrigger value="workout" data-testid="tab-workout-plans">
+                    <Search className="h-4 w-4 mr-2" />
+                    Workout Plans
                   </TabsTrigger>
                   <TabsTrigger value="meals" data-testid="tab-meal-database">
                     <Search className="h-4 w-4 mr-2" />
@@ -194,11 +204,11 @@ export default function TrainerDiet() {
                 </TabsList>
 
                 {/* Diet Plans Tab */}
-                <TabsContent value="plans" className="space-y-4">
+                <TabsContent value="diet" className="space-y-4">
                   <div className="flex justify-between items-center mb-4">
                     <div>
                       <h2 className="text-xl font-bold">Diet Plans for Your Clients</h2>
-                      <p className="text-sm text-muted-foreground">Create and manage diet plans for {clients.length} assigned clients</p>
+                      <p className="text-sm text-muted-foreground">Create and manage diet plans for {clients.length} assigned clients, plus shared admin templates</p>
                     </div>
                     <Button
                       onClick={() => {
@@ -230,9 +240,14 @@ export default function TrainerDiet() {
                                 <CardTitle className="line-clamp-1">{plan.name}</CardTitle>
                                 <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
                               </div>
-                              {plan.clientId && (
-                                <Badge variant="outline">Assigned</Badge>
-                              )}
+                              <div className="flex gap-2">
+                                {plan.isTemplate && (
+                                  <Badge variant="secondary">Admin Template</Badge>
+                                )}
+                                {plan.clientId && (
+                                  <Badge variant="outline">Assigned</Badge>
+                                )}
+                              </div>
                             </div>
                           </CardHeader>
                           <CardContent className="space-y-3">
@@ -295,6 +310,58 @@ export default function TrainerDiet() {
                               >
                                 Delete
                               </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+
+                {/* Workout Plans Tab */}
+                <TabsContent value="workout" className="space-y-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <div>
+                      <h2 className="text-xl font-bold">Workout Plans for Your Clients</h2>
+                      <p className="text-sm text-muted-foreground">Create and manage workout plans for {clients.length} assigned clients, plus shared admin templates</p>
+                    </div>
+                  </div>
+
+                  {isLoadingWorkouts ? (
+                    <p className="text-center text-muted-foreground py-8">Loading workout plans...</p>
+                  ) : workoutPlans.length === 0 ? (
+                    <Card>
+                      <CardContent className="pt-6 text-center py-12 text-muted-foreground">
+                        No workout plans created yet.
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {workoutPlans.map((plan: any) => (
+                        <Card key={plan._id} className="hover-elevate" data-testid={`card-workout-plan-${plan._id}`}>
+                          <CardHeader>
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1">
+                                <CardTitle className="line-clamp-1">{plan.name}</CardTitle>
+                                <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
+                              </div>
+                              <div className="flex gap-2">
+                                {plan.isTemplate && (
+                                  <Badge variant="secondary">Admin Template</Badge>
+                                )}
+                              </div>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            <div className="grid grid-cols-2 gap-3 text-sm">
+                              <div>
+                                <p className="text-muted-foreground">Duration</p>
+                                <p className="font-semibold">{plan.durationWeeks || plan.duration || 4} weeks</p>
+                              </div>
+                              <div>
+                                <p className="text-muted-foreground">Goal</p>
+                                <p className="font-semibold">{plan.goal || 'N/A'}</p>
+                              </div>
                             </div>
                           </CardContent>
                         </Card>
