@@ -112,22 +112,22 @@ export default function ClientAccess() {
       </header>
 
       <main className="relative z-10 min-h-screen flex items-center justify-center px-6">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-4">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto">
-              <Dumbbell className="h-8 w-8 text-primary" />
+        <Card className="w-full max-w-sm shadow-lg">
+          <CardHeader className="space-y-3 pb-4">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 mx-auto">
+              <Dumbbell className="h-6 w-6 text-white" />
             </div>
             <div className="text-center">
-              <CardTitle className="text-2xl font-display">Client Login</CardTitle>
-              <CardDescription className="mt-2">
-                Sign in to access your personalized fitness dashboard
+              <CardTitle className="text-xl font-display">Client Login</CardTitle>
+              <CardDescription className="text-xs mt-1">
+                Access your fitness dashboard
               </CardDescription>
             </div>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="login-email">Email</Label>
+            <form onSubmit={handleLoginSubmit} className="space-y-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="login-email" className="text-sm">Email</Label>
                 <Input
                   id="login-email"
                   type="email"
@@ -135,10 +135,11 @@ export default function ClientAccess() {
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   data-testid="input-login-email"
+                  className="text-sm h-9"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="login-password">Password</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="login-password" className="text-sm">Password</Label>
                 <div className="relative">
                   <Input
                     id="login-password"
@@ -147,12 +148,13 @@ export default function ClientAccess() {
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     data-testid="input-login-password"
+                    className="text-sm h-9"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-0 top-0"
+                    className="absolute right-0 top-0 h-9 w-9"
                     onClick={() => setShowLoginPassword(!showLoginPassword)}
                     data-testid="button-toggle-login-password"
                   >
@@ -164,11 +166,11 @@ export default function ClientAccess() {
                   </Button>
                 </div>
               </div>
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-end pt-1">
                 <Button
                   type="button"
                   variant="ghost"
-                  className="text-sm px-0 h-auto text-primary hover:underline"
+                  className="text-xs px-0 h-auto text-blue-600 hover:underline"
                   onClick={() => setLocation("/forgot-password")}
                   data-testid="link-forgot-password"
                 >
@@ -178,7 +180,7 @@ export default function ClientAccess() {
               </div>
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white h-9 text-sm"
                 disabled={loginMutation.isPending}
                 data-testid="button-login-submit"
               >
