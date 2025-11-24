@@ -95,7 +95,7 @@ export default function AdminLogin() {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img src={logoImage} alt="FitPro" className="h-20 w-20 object-contain" />
-            <span className="text-2xl font-display font-bold tracking-tight hidden sm:inline">
+            <span className="text-2xl font-display font-bold tracking-tight hidden sm:inline text-white">
               FitPro
             </span>
           </div>
@@ -104,6 +104,7 @@ export default function AdminLogin() {
               variant="ghost"
               onClick={() => setLocation("/")}
               data-testid="button-back-home"
+              className="text-white hover:text-white/80"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
