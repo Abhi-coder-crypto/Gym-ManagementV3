@@ -73,20 +73,20 @@ export default function TrainerDashboard() {
       <div className="flex h-screen w-full">
         <TrainerSidebar />
         <div className="flex flex-col flex-1">
-          <header className="flex items-center justify-between p-4 border-b">
-            <div className="flex items-center gap-4">
+          <header className="flex flex-wrap items-center justify-between gap-2 p-3 sm:p-4 border-b min-h-[56px]">
+            <div className="flex items-center gap-2 sm:gap-4">
               <SidebarTrigger data-testid="button-sidebar-toggle" />
-              <h1 className="text-2xl font-display font-bold tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-display font-bold tracking-tight">
                 {user ? `Welcome, ${user.name || 'Trainer'}` : 'Trainer Dashboard'}
               </h1>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {user && (
-                <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/50">
+                <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20">
                   <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
                     {user.name?.charAt(0).toUpperCase() || 'T'}
                   </div>
-                  <div className="text-sm">
+                  <div className="text-sm hidden sm:block">
                     <p className="font-medium">{user.name || 'Trainer'}</p>
                     <p className="text-xs text-muted-foreground">{user.email}</p>
                   </div>
