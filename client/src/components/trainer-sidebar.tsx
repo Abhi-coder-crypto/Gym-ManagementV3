@@ -51,17 +51,17 @@ export function TrainerSidebar() {
   };
 
   return (
-    <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
-          <div className="flex items-center gap-2 px-2 py-2 mb-2">
-            <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
+    <Sidebar className="bg-white dark:bg-white border-r border-gray-200 dark:border-gray-800">
+      <SidebarContent className="bg-white dark:bg-white">
+        <SidebarGroup className="bg-white dark:bg-white">
+          <div className="flex items-center gap-3 px-2 py-4 mb-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg">
+            <img src={logoImage} alt="FitPro" className="h-16 w-16 object-contain" />
             <SidebarGroupLabel className="font-display text-lg m-0">
               FitPro Trainer
             </SidebarGroupLabel>
           </div>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarGroupContent className="bg-white dark:bg-white">
+            <SidebarMenu className="bg-white dark:bg-white">
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
