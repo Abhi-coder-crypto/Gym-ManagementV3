@@ -81,17 +81,8 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <div className="absolute inset-0 z-0">
-        <img
-          src={bgImage}
-          alt="Admin login background"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
-      </div>
-      <div className="relative z-10">
-      <header className="border-b border-white/20 bg-black/30 backdrop-blur-sm">
+    <div className="min-h-screen flex flex-col bg-background">
+      <header className="border-b">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img src={logoImage} alt="FitPro" className="h-20 w-20 object-contain" />
@@ -104,7 +95,6 @@ export default function AdminLogin() {
               variant="ghost"
               onClick={() => setLocation("/")}
               data-testid="button-back-home"
-              className="text-white hover:text-white"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
@@ -114,7 +104,16 @@ export default function AdminLogin() {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-16 flex items-center justify-center min-h-[calc(100vh-80px)]">
+      <main className="relative flex-1 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={bgImage}
+            alt="Admin login background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
+        </div>
+        <div className="relative z-10 container mx-auto px-6 py-16 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-4">
             <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto">
@@ -245,8 +244,8 @@ export default function AdminLogin() {
             </Tabs>
           </CardContent>
         </Card>
+        </div>
       </main>
-      </div>
     </div>
   );
 }
