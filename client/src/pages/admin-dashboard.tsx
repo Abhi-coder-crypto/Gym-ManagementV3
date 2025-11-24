@@ -17,7 +17,7 @@ export default function AdminDashboard() {
   };
 
   const { data: authData } = useQuery<any>({
-    queryKey: ['/api/auth/me?role=admin']
+    queryKey: ['auth', 'admin']
   });
 
   const user = authData?.user;
