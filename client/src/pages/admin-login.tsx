@@ -181,7 +181,7 @@ export default function AdminLogin() {
                   </Button>
                   <div className="text-center">
                     <Button
-                      variant="link"
+                      variant="ghost"
                       type="button"
                       className="text-sm"
                       onClick={() => setLocation("/admin/forgot-password")}
@@ -232,7 +232,7 @@ export default function AdminLogin() {
                   </Button>
                   <div className="text-center">
                     <Button
-                      variant="link"
+                      variant="ghost"
                       type="button"
                       className="text-sm"
                       onClick={() => setLocation("/admin/forgot-password")}
