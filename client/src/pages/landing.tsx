@@ -42,8 +42,7 @@ export default function Landing() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
             <Button
-              size="lg"
-              className="text-lg px-12 py-6 h-auto w-full sm:w-auto backdrop-blur-sm bg-primary/90 hover:bg-primary"
+              className="text-lg backdrop-blur-sm bg-white text-black border-2 border-black hover:bg-white/90"
               onClick={() => setLocation("/client-access")}
               data-testid="button-client-access"
             >
