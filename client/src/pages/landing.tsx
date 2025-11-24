@@ -37,8 +37,7 @@ export default function Landing() {
             FitPro Management System
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-16 max-w-3xl mx-auto">
-            Complete online gym management platform with client dashboards, admin controls,
-            workout libraries, diet management, and live training sessions
+            Transform your fitness journey with personalized training and nutrition
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
