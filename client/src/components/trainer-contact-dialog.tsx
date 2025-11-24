@@ -16,18 +16,14 @@ interface TrainerContactDropdownProps {
 export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownProps) {
   const [trainerPhone, setTrainerPhone] = useState<string | null>(null);
   const [trainerName, setTrainerName] = useState<string>("");
-  const [clientId, setClientId] = useState<string | null>(null);
   const [hasTrainer, setHasTrainer] = useState(false);
 
-  useEffect(() => {
-    const id = localStorage.getItem("clientId");
-    setClientId(id);
-  }, []);
-
-  const { data: clientData } = useQuery<any>({
-    queryKey: ["/api/client-profile", clientId],
-    enabled: !!clientId && isProOrElite,
+  const { data: authData } = useQuery<any>({
+    queryKey: ["/api/auth/me"],
+    enabled: isProOrElite,
   });
+
+  const clientData = authData?.client || authData?.user;
 
   useEffect(() => {
     if (clientData?.trainerId) {
@@ -35,7 +31,7 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
     } else {
       setHasTrainer(false);
     }
-  }, [clientData]);
+  }, [clientData?.trainerId]);
 
   const { data: trainerData } = useQuery<any>({
     queryKey: ["/api/trainer", clientData?.trainerId],

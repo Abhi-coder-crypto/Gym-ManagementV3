@@ -12,18 +12,14 @@ interface ContactTrainerDialogProps {
 export function ContactTrainerDialog({ open, onOpenChange }: ContactTrainerDialogProps) {
   const [trainerPhone, setTrainerPhone] = useState<string | null>(null);
   const [trainerName, setTrainerName] = useState<string>("");
-  const [clientId, setClientId] = useState<string | null>(null);
   const [hasTrainer, setHasTrainer] = useState(false);
 
-  useEffect(() => {
-    const id = localStorage.getItem("clientId");
-    setClientId(id);
-  }, []);
-
-  const { data: clientData } = useQuery<any>({
-    queryKey: ["/api/client-profile", clientId],
-    enabled: !!clientId && open,
+  const { data: authData } = useQuery<any>({
+    queryKey: ["/api/auth/me"],
+    enabled: open,
   });
+
+  const clientData = authData?.client || authData?.user;
 
   useEffect(() => {
     if (clientData?.trainerId) {
@@ -31,7 +27,7 @@ export function ContactTrainerDialog({ open, onOpenChange }: ContactTrainerDialo
     } else {
       setHasTrainer(false);
     }
-  }, [clientData]);
+  }, [clientData?.trainerId]);
 
   const { data: trainerData } = useQuery<any>({
     queryKey: ["/api/trainer", clientData?.trainerId],
