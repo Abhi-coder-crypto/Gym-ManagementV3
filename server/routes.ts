@@ -283,26 +283,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Logged out successfully" });
   });
   
-  // Get current user endpoint
-  app.get("/api/auth/me", authenticateToken, async (req, res) => {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
-      
-      const user = await storage.getUserById(req.user.userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      
-      // Return user data without password
-      const { password: _, ...userWithoutPassword } = user.toObject();
-      res.json({ user: userWithoutPassword });
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  });
-  
   // Request password reset
   app.post("/api/auth/forgot-password", passwordResetRateLimiter, async (req, res) => {
     try {
