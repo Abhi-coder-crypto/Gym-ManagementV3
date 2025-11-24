@@ -84,7 +84,7 @@ export default function AdminLogin() {
       <header className="border-b">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={logoImage} alt="FitPro" className="h-10 w-10 object-contain" />
+            <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
             <span className="text-2xl font-display font-bold tracking-tight hidden sm:inline">
               FitPro
             </span>

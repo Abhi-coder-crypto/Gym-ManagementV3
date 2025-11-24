@@ -51,7 +51,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
               className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 flex-shrink-0"
               data-testid="button-logo-home"
             >
-              <img src={logoImage} alt="FitPro" className="h-10 w-10 object-contain" />
+              <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
               <span className="text-2xl font-display font-bold tracking-tight hidden sm:inline">FitPro</span>
             </button>
           </div>
