@@ -162,7 +162,7 @@ export default function ClientDashboard() {
   if (isLoading || !dashboardData) {
     return (
       <div className="w-full bg-background">
-        <ClientHeader currentPage="dashboard" />
+        <ClientHeader currentPage="dashboard" packageName={packageAccess?.packageName} />
         <main className="px-4 py-6 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto space-y-6">
             <Skeleton className="h-10 w-64" />
@@ -225,7 +225,7 @@ export default function ClientDashboard() {
 
   return (
     <div className="w-full bg-background min-h-screen mb-20 md:mb-0">
-      <ClientHeader currentPage="dashboard" />
+      <ClientHeader currentPage="dashboard" packageName={packageAccess?.packageName} />
 
       <main className="px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto space-y-8">

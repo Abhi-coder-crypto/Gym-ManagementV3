@@ -195,8 +195,7 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
           </div>
         </div>
 
-        <TrainerContactDialog open={contactDialogOpen} onOpenChange={setContactDialogOpen}
-        </div>
+        <TrainerContactDialog open={contactDialogOpen} onOpenChange={setContactDialogOpen} />
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
