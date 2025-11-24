@@ -89,7 +89,7 @@ export default function ClientAccess() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50" />
       </div>
 
-      <header className="absolute top-0 left-0 right-0 z-10">
+      <header className="fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img src={logoImage} alt="FitPro" className="h-20 w-20 object-contain" />
@@ -102,7 +102,7 @@ export default function ClientAccess() {
               type="button"
               onClick={() => setLocation("/")}
               data-testid="button-back-home"
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-md transition-colors flex items-center gap-1 font-medium"
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-md transition-colors flex items-center gap-1 font-medium cursor-pointer pointer-events-auto"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -112,7 +112,9 @@ export default function ClientAccess() {
         </div>
       </header>
 
-      <main className="relative z-10 min-h-screen flex items-center justify-center px-6">
+      <div className="pt-24"></div>
+
+      <main className="relative min-h-screen flex items-center justify-center px-6">
         <Card className="w-full max-w-sm shadow-lg">
           <CardHeader className="space-y-2 pb-2">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto">
