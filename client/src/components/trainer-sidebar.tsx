@@ -55,7 +55,7 @@ export function TrainerSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <div className="flex items-center gap-2 px-2 py-2 mb-2">
-            <img src={logoImage} alt="FitPro" className="h-10 w-10 object-contain" />
+            <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
             <SidebarGroupLabel className="font-display text-lg m-0">
               FitPro Trainer
             </SidebarGroupLabel>
