@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Phone, MapPin, CreditCard, FileText, Download, Globe, Shield, Heart, Activity, Moon, Sun } from "lucide-react";
+import { Mail, Phone, MapPin, CreditCard, FileText, Download, Globe, Shield, Heart, Activity, Moon, Sun, LogOut } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
@@ -124,6 +124,26 @@ export default function ClientProfile() {
       .slice(0, 2);
   };
 
+  const handleLogout = async () => {
+    try {
+      await apiRequest('POST', '/api/logout', {});
+      localStorage.removeItem('clientId');
+      localStorage.removeItem('authToken');
+      queryClient.clear();
+      setLocation('/client-access');
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out",
+      });
+    } catch (error) {
+      toast({
+        title: "Logout failed",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (isLoadingClient || !client) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -153,7 +173,13 @@ export default function ClientProfile() {
                 <Badge variant="outline" className="bg-chart-3 text-white">{t('profile.active')}</Badge>
               </div>
             </div>
-            <Button data-testid="button-edit-profile">{t('profile.editProfile')}</Button>
+            <div className="flex gap-2">
+              <Button data-testid="button-edit-profile">{t('profile.editProfile')}</Button>
+              <Button variant="destructive" onClick={handleLogout} data-testid="button-logout">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
 
           <Tabs defaultValue="personal" className="w-full">

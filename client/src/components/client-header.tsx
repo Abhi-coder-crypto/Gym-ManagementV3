@@ -47,7 +47,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
               </button>
             )}
             <button 
-              onClick={() => setLocation("/client-access")} 
+              onClick={() => setLocation("/client")} 
               className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 flex-shrink-0"
               data-testid="button-logo-home"
             >
