@@ -1,20 +1,16 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { NotificationBell } from "@/components/notification-bell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UploadVideoModal } from "@/components/upload-video-modal";
-import { Search, Plus, Edit, Trash2, Eye, CheckCircle2, FileText, Filter, UserPlus, Play } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Search, Plus, Edit, Trash2, Eye, CheckCircle2, FileText, Play, Clock } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { EditVideoModal } from "@/components/edit-video-modal";
 import { AssignVideoDialog } from "@/components/assign-video-dialog";
@@ -46,9 +42,6 @@ export default function AdminVideos() {
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [deleteVideoId, setDeleteVideoId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
-  const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
-  const [showFilters, setShowFilters] = useState(false);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
   const [assignVideoId, setAssignVideoId] = useState<string>("");
   const [assignVideoTitle, setAssignVideoTitle] = useState<string>("");
@@ -104,138 +97,14 @@ export default function AdminVideos() {
     }
   };
 
-  // Filter videos
+  // Filter videos by search
   const filteredVideos = videos.filter(video => {
     const matchesSearch = video.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       video.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = categoryFilter === "all" || video.category === categoryFilter;
-    const matchesDifficulty = difficultyFilter === "all" || video.difficulty === difficultyFilter;
-    return matchesSearch && matchesCategory && matchesDifficulty;
+    return matchesSearch;
   });
 
-  const publishedVideos = filteredVideos.filter(v => !v.isDraft);
-  const draftVideos = filteredVideos.filter(v => v.isDraft);
-
-  const VideoGrid = ({ videos: videosToDisplay, isDraftTab }: { videos: Video[], isDraftTab?: boolean }) => (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {videosToDisplay.map((video) => (
-        <Card key={video._id} className="overflow-hidden" data-testid={`card-video-${video._id}`}>
-          <div className="relative aspect-video bg-muted">
-            {video.thumbnail ? (
-              <img 
-                src={video.thumbnail} 
-                alt={video.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full text-muted-foreground">
-                <FileText className="h-12 w-12" />
-              </div>
-            )}
-            {video.isDraft && (
-              <Badge className="absolute top-2 right-2" variant="secondary" data-testid="badge-draft">
-                Draft
-              </Badge>
-            )}
-          </div>
-          
-          <CardHeader className="space-y-2">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-semibold line-clamp-2" data-testid={`text-video-title-${video._id}`}>
-                {video.title}
-              </h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="outline" data-testid={`badge-category-${video._id}`}>
-                {video.category}
-              </Badge>
-              {video.difficulty && (
-                <Badge variant="outline" data-testid={`badge-difficulty-${video._id}`}>
-                  {video.difficulty}
-                </Badge>
-              )}
-            </div>
-          </CardHeader>
-
-          <CardContent className="space-y-2">
-            {video.description && (
-              <p className="text-sm text-muted-foreground line-clamp-2">
-                {video.description}
-              </p>
-            )}
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              {video.duration && (
-                <div className="text-muted-foreground">
-                  <span className="font-medium">{video.duration}</span> min
-                </div>
-              )}
-              {video.trainer && (
-                <div className="text-muted-foreground truncate">
-                  By {video.trainer}
-                </div>
-              )}
-            </div>
-            
-            {video.equipment && video.equipment.length > 0 && (
-              <div className="text-sm text-muted-foreground">
-                Equipment: {video.equipment.join(", ")}
-              </div>
-            )}
-
-            <div className="flex items-center gap-4 pt-2 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Eye className="h-4 w-4" />
-                <span data-testid={`text-views-${video._id}`}>{video.views || 0}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <CheckCircle2 className="h-4 w-4" />
-                <span data-testid={`text-completions-${video._id}`}>{video.completions || 0}</span>
-              </div>
-            </div>
-          </CardContent>
-
-          <CardFooter className="flex gap-2 flex-wrap">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPlayingVideo({ url: video.url, title: video.title })}
-              data-testid={`button-preview-${video._id}`}
-            >
-              <Play className="h-4 w-4 mr-2" />
-              Preview
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleAssign(video)}
-              data-testid={`button-assign-${video._id}`}
-            >
-              <UserPlus className="h-4 w-4 mr-2" />
-              Assign
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleEdit(video)}
-              data-testid={`button-edit-${video._id}`}
-            >
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleDelete(video._id)}
-              data-testid={`button-delete-${video._id}`}
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete
-            </Button>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
-  );
+  const categories = Array.from(new Set(videos.map((v: Video) => v.category)));
 
   return (
     <SidebarProvider style={style as React.CSSProperties}>
@@ -247,7 +116,13 @@ export default function AdminVideos() {
               <SidebarTrigger data-testid="button-sidebar-toggle" />
               <h1 className="text-2xl font-display font-bold tracking-tight">Video Library</h1>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <Button onClick={() => setShowUploadModal(true)} data-testid="button-upload-video">
+                <Plus className="h-4 w-4 mr-2" />
+                Upload Video
+              </Button>
+              <ThemeToggle />
+            </div>
           </header>
 
           <VideoPlayerModal
@@ -257,196 +132,214 @@ export default function AdminVideos() {
             videoTitle={playingVideo?.title || ""}
           />
 
-          <main className="flex-1 overflow-auto p-8 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10">
+          <main className="flex-1 overflow-auto p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10">
             <div className="max-w-7xl mx-auto space-y-6">
-              <div className="flex items-center justify-between gap-4 flex-wrap">
-                <div className="flex items-center gap-2 flex-1 max-w-2xl flex-wrap">
-                  <div className="relative flex-1 min-w-[250px]">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search videos by title or description..."
-                      className="pl-10"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      data-testid="input-search-videos"
-                    />
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => setShowFilters(!showFilters)}
-                    data-testid="button-toggle-filters"
-                  >
-                    <Filter className="h-4 w-4" />
-                  </Button>
-                </div>
-                <Button onClick={() => setShowUploadModal(true)} data-testid="button-upload-video">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Upload Video
-                </Button>
+              {/* Search */}
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search videos by title or description..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                  data-testid="input-search"
+                />
               </div>
 
-              {showFilters && (
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="grid md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Category</label>
-                        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                          <SelectTrigger data-testid="select-category-filter">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
-                            <SelectItem value="Strength">Strength</SelectItem>
-                            <SelectItem value="Cardio">Cardio</SelectItem>
-                            <SelectItem value="Yoga">Yoga</SelectItem>
-                            <SelectItem value="HIIT">HIIT</SelectItem>
-                            <SelectItem value="Flexibility">Flexibility</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Difficulty</label>
-                        <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-                          <SelectTrigger data-testid="select-difficulty-filter">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Levels</SelectItem>
-                            <SelectItem value="beginner">Beginner</SelectItem>
-                            <SelectItem value="intermediate">Intermediate</SelectItem>
-                            <SelectItem value="advanced">Advanced</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="flex items-end">
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            setCategoryFilter("all");
-                            setDifficultyFilter("all");
-                          }}
-                          className="w-full"
-                          data-testid="button-clear-filters"
-                        >
-                          Clear Filters
-                        </Button>
-                      </div>
+              {/* Stats Cards */}
+              <div className="grid gap-4 md:grid-cols-4">
+                <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-500/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Videos</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{videos.length}</div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-500/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Categories</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{categories.length}</div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-500/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Duration</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                      {Math.round(videos.reduce((sum: number, v: Video) => sum + (v.duration || 0), 0) / 60)}h
                     </div>
                   </CardContent>
                 </Card>
-              )}
 
-              {isLoading ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <Card key={i}>
-                      <Skeleton className="aspect-video" />
-                      <CardHeader>
-                        <Skeleton className="h-6 w-3/4" />
-                        <Skeleton className="h-4 w-1/2" />
-                      </CardHeader>
-                      <CardContent>
-                        <Skeleton className="h-16 w-full" />
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <Tabs defaultValue="published" className="space-y-6">
-                  <TabsList>
-                    <TabsTrigger value="published" data-testid="tab-published">
-                      Published ({publishedVideos.length})
-                    </TabsTrigger>
-                    <TabsTrigger value="drafts" data-testid="tab-drafts">
-                      Drafts ({draftVideos.length})
-                    </TabsTrigger>
-                    <TabsTrigger value="all" data-testid="tab-all">
-                      All ({filteredVideos.length})
-                    </TabsTrigger>
-                  </TabsList>
+                <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border-orange-500/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">This Month</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+                      {videos.filter((v: Video) => {
+                        const created = new Date(v.createdAt);
+                        const now = new Date();
+                        return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
+                      }).length}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
 
-                  <TabsContent value="published" className="space-y-4">
-                    {publishedVideos.length === 0 ? (
-                      <Card>
-                        <CardContent className="p-12 text-center text-muted-foreground">
-                          No published videos found. Upload your first video to get started!
-                        </CardContent>
-                      </Card>
-                    ) : (
-                      <VideoGrid videos={publishedVideos} />
-                    )}
-                  </TabsContent>
+              {/* Videos Grid */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>All Videos</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {isLoading ? (
+                    <p className="text-center text-muted-foreground py-8">Loading videos...</p>
+                  ) : filteredVideos.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8">No videos found</p>
+                  ) : (
+                    <div className="grid gap-4 md:grid-cols-3">
+                      {filteredVideos.map((video: Video) => (
+                        <Card key={video._id} className="hover-elevate overflow-hidden" data-testid={`card-video-${video._id}`}>
+                          <CardContent className="p-0">
+                            <div className="relative aspect-video bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center rounded-t-md group">
+                              {video.url ? (
+                                <>
+                                  <FileText className="h-12 w-12 text-muted-foreground" />
+                                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button 
+                                      size="icon" 
+                                      className="h-12 w-12 rounded-full"
+                                      onClick={() => video.url && setPlayingVideo({ url: video.url, title: video.title })}
+                                      data-testid={`button-play-${video._id}`}
+                                    >
+                                      <Play className="h-6 w-6" />
+                                    </Button>
+                                  </div>
+                                </>
+                              ) : (
+                                <FileText className="h-12 w-12 text-muted-foreground" />
+                              )}
+                              {video.isDraft && (
+                                <Badge className="absolute top-2 right-2" variant="secondary" data-testid="badge-draft">
+                                  Draft
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="p-4 space-y-3">
+                              <div>
+                                <h3 className="font-semibold line-clamp-1" data-testid={`text-video-title-${video._id}`}>{video.title}</h3>
+                                <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                                  {video.description || 'No description'}
+                                </p>
+                              </div>
+                              
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <Badge variant="secondary">{video.category}</Badge>
+                                {video.difficulty && (
+                                  <Badge variant="outline">{video.difficulty}</Badge>
+                                )}
+                              </div>
 
-                  <TabsContent value="drafts" className="space-y-4">
-                    {draftVideos.length === 0 ? (
-                      <Card>
-                        <CardContent className="p-12 text-center text-muted-foreground">
-                          No draft videos. Save videos as drafts to publish them later.
-                        </CardContent>
-                      </Card>
-                    ) : (
-                      <VideoGrid videos={draftVideos} isDraftTab />
-                    )}
-                  </TabsContent>
+                              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                                <div className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  <span>{video.duration || 0} min</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Eye className="h-3 w-3" />
+                                  <span>{video.views || 0} views</span>
+                                </div>
+                              </div>
 
-                  <TabsContent value="all" className="space-y-4">
-                    {filteredVideos.length === 0 ? (
-                      <Card>
-                        <CardContent className="p-12 text-center text-muted-foreground">
-                          No videos found matching your search criteria.
-                        </CardContent>
-                      </Card>
-                    ) : (
-                      <VideoGrid videos={filteredVideos} />
-                    )}
-                  </TabsContent>
-                </Tabs>
-              )}
+                              <div className="flex gap-2 flex-wrap pt-2 border-t">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex-1"
+                                  onClick={() => handleAssign(video)}
+                                  data-testid={`button-assign-${video._id}`}
+                                >
+                                  Assign
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex-1"
+                                  onClick={() => handleEdit(video)}
+                                  data-testid={`button-edit-${video._id}`}
+                                >
+                                  <Edit className="h-3 w-3 mr-1" />
+                                  Edit
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex-1"
+                                  onClick={() => handleDelete(video._id)}
+                                  data-testid={`button-delete-${video._id}`}
+                                >
+                                  <Trash2 className="h-3 w-3 mr-1" />
+                                  Delete
+                                </Button>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </main>
         </div>
       </div>
 
+      {/* Upload Video Modal */}
       <UploadVideoModal
-        open={showUploadModal}
-        onOpenChange={setShowUploadModal}
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
       />
 
+      {/* Edit Video Modal */}
       {selectedVideo && (
         <EditVideoModal
-          open={showEditModal}
-          onOpenChange={setShowEditModal}
+          isOpen={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedVideo(null);
+          }}
           video={selectedVideo}
         />
       )}
 
+      {/* Assign Video Dialog */}
       <AssignVideoDialog
-        open={showAssignDialog}
-        onOpenChange={setShowAssignDialog}
+        isOpen={showAssignDialog}
+        onClose={() => setShowAssignDialog(false)}
         videoId={assignVideoId}
         videoTitle={assignVideoTitle}
       />
 
-      <AlertDialog open={!!deleteVideoId} onOpenChange={() => setDeleteVideoId(null)}>
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!deleteVideoId} onOpenChange={(open) => !open && setDeleteVideoId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Video</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete this video? This action cannot be undone.
-              All client assignments and progress data for this video will also be deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel data-testid="button-cancel-delete">Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={confirmDelete}
-              data-testid="button-confirm-delete"
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
