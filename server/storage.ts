@@ -905,13 +905,31 @@ export class MongoStorage implements IStorage {
   }
 
   async createDietPlan(data: Partial<IDietPlan>): Promise<IDietPlan> {
-    const plan = new DietPlan(data);
-    return await plan.save();
+    const planData = {
+      ...data,
+      meals: data.meals || [],
+    };
+    const plan = new DietPlan(planData);
+    const saved = await plan.save();
+    console.log(`[Diet Create] Created diet plan with ${saved.meals?.length || 0} meals`);
+    return saved;
   }
 
   async updateDietPlan(id: string, data: Partial<IDietPlan>): Promise<IDietPlan | null> {
     data.updatedAt = new Date();
-    return await DietPlan.findByIdAndUpdate(id, data, { new: true });
+    
+    // Fetch existing plan to preserve meals if not provided in update
+    const existingPlan = await DietPlan.findById(id);
+    const updateData = {
+      ...data,
+      meals: data.meals !== undefined ? data.meals : existingPlan?.meals || [],
+    };
+    
+    const updated = await DietPlan.findByIdAndUpdate(id, updateData, { new: true });
+    if (updated) {
+      console.log(`[Diet Update] Updated diet plan with ${updated.meals?.length || 0} meals`);
+    }
+    return updated;
   }
 
   async deleteDietPlan(id: string): Promise<boolean> {
