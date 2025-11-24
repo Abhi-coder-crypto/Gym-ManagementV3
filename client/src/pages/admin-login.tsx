@@ -109,7 +109,9 @@ export default function AdminLogin() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
             </Button>
-            <ThemeToggle />
+            <div className="text-white [&_button]:text-white [&_svg]:text-white">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </header>
