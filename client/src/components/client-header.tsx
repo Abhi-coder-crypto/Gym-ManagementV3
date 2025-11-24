@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator, LayoutDashboard, Flame, Zap, Target, Camera, BarChart3 } from "lucide-react";
+import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator, LayoutDashboard, Flame, Zap, Target, Camera, BarChart3, LogOut } from "lucide-react";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/lib/language-context";
 import { queryClient } from "@/lib/queryClient";
@@ -163,6 +163,18 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
             >
               <User className="h-5 w-5" />
             </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => {
+                localStorage.clear();
+                setLocation("/");
+              }} 
+              data-testid="button-logout"
+              title="Logout"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
           </div>
         </div>
 
@@ -307,6 +319,19 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
                 data-testid="link-profile-mobile"
               >
                 <User className="h-5 w-5" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => {
+                  localStorage.clear();
+                  setLocation("/");
+                  setMobileMenuOpen(false);
+                }}
+                data-testid="button-logout-mobile"
+                title="Logout"
+              >
+                <LogOut className="h-5 w-5" />
               </Button>
             </div>
           </nav>
