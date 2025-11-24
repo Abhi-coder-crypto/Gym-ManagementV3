@@ -36,6 +36,13 @@ export default function AdminLogin() {
         throw new Error(data.message || 'Login failed');
       }
 
+      // Store token in sessionStorage for this tab
+      if (data.token) {
+        sessionStorage.setItem('adminToken', data.token);
+        // Clear trainer token if it exists
+        sessionStorage.removeItem('trainerToken');
+      }
+
       toast({
         title: "Login successful",
         description: "Welcome to FitPro Admin Dashboard",

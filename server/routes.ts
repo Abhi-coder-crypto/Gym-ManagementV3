@@ -294,10 +294,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const accessToken = generateAccessToken(tokenPayload);
       const refreshToken = generateRefreshToken(tokenPayload);
       
-      // Clear trainer tokens to prevent role conflicts
-      res.clearCookie('trainerToken', { httpOnly: true, sameSite: 'lax' });
-      res.clearCookie('trainerRefreshToken', { httpOnly: true, sameSite: 'lax' });
-      
       res.cookie('adminToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -315,6 +311,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { password: _, ...userWithoutPassword } = user.toObject();
       res.json({
         message: "Admin login successful",
+        token: accessToken,
         user: userWithoutPassword,
       });
     } catch (error: any) {
@@ -362,10 +359,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const accessToken = generateAccessToken(tokenPayload);
       const refreshToken = generateRefreshToken(tokenPayload);
       
-      // Clear admin tokens to prevent role conflicts
-      res.clearCookie('adminToken', { httpOnly: true, sameSite: 'lax' });
-      res.clearCookie('adminRefreshToken', { httpOnly: true, sameSite: 'lax' });
-      
       res.cookie('trainerToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -383,6 +376,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { password: _, ...userWithoutPassword } = user.toObject();
       res.json({
         message: "Trainer login successful",
+        token: accessToken,
         user: userWithoutPassword,
       });
     } catch (error: any) {

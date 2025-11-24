@@ -17,9 +17,18 @@ declare global {
  */
 export function authenticateToken(req: Request, res: Response, next: NextFunction) {
   try {
-    // Try tokens in order: adminToken, trainerToken, accessToken
-    // Each cookie contains the role in its JWT payload, so the correct role will be returned
-    const token = req.cookies?.adminToken || req.cookies?.trainerToken || req.cookies?.accessToken;
+    let token: string | undefined;
+    
+    // Try to get token from Authorization header (Bearer token)
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    }
+    
+    // Fallback to cookies for backward compatibility
+    if (!token) {
+      token = req.cookies?.adminToken || req.cookies?.trainerToken || req.cookies?.accessToken;
+    }
     
     if (!token) {
       return res.status(401).json({ 
