@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Dumbbell, ArrowLeft, Eye, EyeOff, KeyRound } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import backgroundImage from "@assets/cleint_login_1763960397741.jpg";
 
 export default function ClientAccess() {
   const [, setLocation] = useLocation();
@@ -77,18 +78,28 @@ export default function ClientAccess() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
+    <div className="min-h-screen">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={backgroundImage}
+          alt="Gym background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50" />
+      </div>
+
+      <header className="absolute top-0 left-0 right-0 z-10">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Dumbbell className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-display font-bold tracking-tight">
+            <Dumbbell className="h-8 w-8 text-white" />
+            <span className="text-2xl font-display font-bold tracking-tight text-white">
               FitPro
             </span>
           </div>
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
+              className="text-white hover:text-white/80"
               onClick={() => setLocation("/")}
               data-testid="button-back-home"
             >
@@ -100,7 +111,7 @@ export default function ClientAccess() {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-16 flex items-center justify-center min-h-[calc(100vh-80px)]">
+      <main className="relative z-10 min-h-screen flex items-center justify-center px-6">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-4">
             <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto">
