@@ -104,3 +104,22 @@ waitForPort = 5000
 [agent]
 integrations = ["javascript_log_in_with_replit:1.0.0", "javascript_stripe:1.0.0", "javascript_database:1.0.0"]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+JWT_SECRET = "fitpro-super-secret-jwt-key-2024-change-in-production"
+JWT_REFRESH_SECRET = "fitpro-refresh-secret-key-2024-change-in-production"
+ADMIN_PASSWORD = "Admin@123"
+PORT = "5000"
+SMTP_HOST = "smtp.gmail.com"
+SMTP_PORT = "587"
+SMTP_USER = "abhijeet18012001@gmail.com"
+SMTP_PASS = "ovrlxmplucmzjyrm"
+EMAIL_FROM = "abhijeet18012001@gmail.com"
+BASE_URL = "https://workspace.elliannadaniels.repl.co"
+FILE_ENCRYPTION_KEY = "662cd0a7ac62e5f4908e03f2aabd69f82f8744be303010079caa8f3696dba083"
+DB_FIELD_ENCRYPTION_KEY = "c901f8331e73059be6ac72352f17c60cf211a8163aad225941c0137959685ade"
+ZOOM_ACCOUNT_ID = "iRUT-HKzQCig4lNdA2py3w"
+ZOOM_ACCOUNT_SECRET = "R0UgGamM4soeHd8Ku7mvfi4grixkyIPe"
+ZOOM_CLIENT_ID = "KuUAiFDzTB6fz7twhpXg"
