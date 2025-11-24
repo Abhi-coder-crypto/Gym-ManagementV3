@@ -59,10 +59,6 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
     }
   };
 
-  if (!isProOrElite) {
-    return null;
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -70,31 +66,34 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
           variant="ghost" 
           size="icon"
           data-testid="button-call-trainer"
-          title={hasTrainer ? "Contact Trainer" : "No trainer assigned"}
+          title={!isProOrElite ? "Not available for your plan" : (hasTrainer ? "Contact Trainer" : "No trainer assigned")}
+          disabled={!isProOrElite}
         >
           <Phone className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem
-          onClick={handleCall}
-          disabled={!hasTrainer || !trainerPhone}
-          className={hasTrainer && trainerPhone ? "cursor-pointer gap-2" : "gap-2"}
-          data-testid="dropdown-call"
-        >
-          <Phone className="h-4 w-4" />
-          <span>{hasTrainer ? "Call" : "No trainer assigned"}</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={handleMessage}
-          disabled={!hasTrainer || !trainerPhone}
-          className={hasTrainer && trainerPhone ? "cursor-pointer gap-2" : "gap-2"}
-          data-testid="dropdown-message"
-        >
-          <MessageCircle className="h-4 w-4" />
-          <span>{hasTrainer ? "Message" : "No trainer assigned"}</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+      {isProOrElite && (
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuItem
+            onClick={handleCall}
+            disabled={!hasTrainer || !trainerPhone}
+            className={hasTrainer && trainerPhone ? "cursor-pointer gap-2" : "gap-2"}
+            data-testid="dropdown-call"
+          >
+            <Phone className="h-4 w-4" />
+            <span>{hasTrainer ? "Call" : "No trainer assigned"}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={handleMessage}
+            disabled={!hasTrainer || !trainerPhone}
+            className={hasTrainer && trainerPhone ? "cursor-pointer gap-2" : "gap-2"}
+            data-testid="dropdown-message"
+          >
+            <MessageCircle className="h-4 w-4" />
+            <span>{hasTrainer ? "Message" : "No trainer assigned"}</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      )}
     </DropdownMenu>
   );
 }
