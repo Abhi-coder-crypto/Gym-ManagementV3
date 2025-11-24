@@ -5463,8 +5463,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied. You can only access your own diet plans." });
       }
       
-      const plans = await storage.getTrainerDietPlans(req.params.trainerId);
-      res.json(plans);
+      const trainerPlans = await storage.getTrainerDietPlans(req.params.trainerId);
+      
+      // Also fetch admin-created templates that are shared with all trainers
+      const allPlans = await DietPlan.find().lean();
+      const adminTemplates = allPlans.filter((plan: any) => {
+        // Include plans created by admin (marked with isTemplate or where createdBy is admin user)
+        return plan.createdBy && (plan.createdBy.toString().includes('admin') || plan.isTemplate === true);
+      });
+      
+      // Combine trainer's plans with admin templates
+      const combined = [...trainerPlans, ...adminTemplates];
+      res.json(combined);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
