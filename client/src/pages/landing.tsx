@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Dumbbell, User, ShieldCheck } from "lucide-react";
+import { User, ShieldCheck } from "lucide-react";
 import { useLocation } from "wouter";
 import heroImage from "@assets/generated_images/Gym_hero_background_image_43c161d8.png";
+import logoImage from "@assets/TWWLOGO_1763965276890.png";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -12,8 +13,8 @@ export default function Landing() {
       <header className="absolute top-0 left-0 right-0 z-10">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Dumbbell className="h-8 w-8 text-white" />
-            <span className="text-2xl font-display font-bold tracking-tight text-white">
+            <img src={logoImage} alt="FitPro" className="h-10 w-10 object-contain" />
+            <span className="text-2xl font-display font-bold tracking-tight text-white hidden sm:inline">
               FitPro
             </span>
           </div>

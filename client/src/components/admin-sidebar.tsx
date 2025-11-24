@@ -12,6 +12,7 @@ import {
   LogOut,
   User,
 } from "lucide-react";
+import logoImage from "@assets/TWWLOGO_1763965276890.png";
 import {
   Sidebar,
   SidebarContent,
@@ -68,9 +69,12 @@ export function AdminSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="font-display text-lg">
-            FitPro Admin
-          </SidebarGroupLabel>
+          <div className="flex items-center gap-2 px-2 py-2 mb-2">
+            <img src={logoImage} alt="FitPro" className="h-8 w-8 object-contain" />
+            <SidebarGroupLabel className="font-display text-lg m-0">
+              FitPro Admin
+            </SidebarGroupLabel>
+          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (

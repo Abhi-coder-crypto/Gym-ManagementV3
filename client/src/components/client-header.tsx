@@ -8,11 +8,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Dumbbell, Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator } from "lucide-react";
+import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator } from "lucide-react";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/lib/language-context";
 import { queryClient } from "@/lib/queryClient";
 import { useState } from "react";
+import logoImage from "@assets/TWWLOGO_1763965276890.png";
 
 interface ClientHeaderProps {
   currentPage?: 'dashboard' | 'workouts' | 'videos' | 'diet' | 'sessions' | 'history' | 'workout-history' | 'progress' | 'profile' | 'weight-tracking' | 'body-measurements' | 'weekly-completion' | 'achievements' | 'achievement-gallery' | 'personal-records' | 'monthly-reports' | 'goals' | 'calculators' | 'calendar' | 'messages' | 'support-tickets' | 'announcements' | 'forum';
@@ -50,8 +51,8 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
               className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 flex-shrink-0"
               data-testid="button-logo-home"
             >
-              <Dumbbell className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-display font-bold tracking-tight">FitPro</span>
+              <img src={logoImage} alt="FitPro" className="h-10 w-10 object-contain" />
+              <span className="text-2xl font-display font-bold tracking-tight hidden sm:inline">FitPro</span>
             </button>
           </div>
 

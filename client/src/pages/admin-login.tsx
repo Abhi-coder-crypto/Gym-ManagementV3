@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Dumbbell, ArrowLeft, Shield, User } from "lucide-react";
+import { ArrowLeft, Shield, User } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import logoImage from "@assets/TWWLOGO_1763965276890.png";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
@@ -83,8 +84,8 @@ export default function AdminLogin() {
       <header className="border-b">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Dumbbell className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-display font-bold tracking-tight">
+            <img src={logoImage} alt="FitPro" className="h-10 w-10 object-contain" />
+            <span className="text-2xl font-display font-bold tracking-tight hidden sm:inline">
               FitPro
             </span>
           </div>
