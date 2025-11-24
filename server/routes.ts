@@ -294,6 +294,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const accessToken = generateAccessToken(tokenPayload);
       const refreshToken = generateRefreshToken(tokenPayload);
       
+      // Clear trainer cookies to prevent conflicts
+      res.clearCookie('trainerToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      });
+      res.clearCookie('trainerRefreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      });
+      
       res.cookie('adminToken', accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -357,6 +369,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const accessToken = generateAccessToken(tokenPayload);
       const refreshToken = generateRefreshToken(tokenPayload);
+      
+      // Clear admin cookies to prevent conflicts
+      res.clearCookie('adminToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      });
+      res.clearCookie('adminRefreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      });
       
       res.cookie('trainerToken', accessToken, {
         httpOnly: true,
