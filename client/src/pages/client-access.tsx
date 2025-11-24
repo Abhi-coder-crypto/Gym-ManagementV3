@@ -97,16 +97,16 @@ export default function ClientAccess() {
               FitPro
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              className="text-white hover:text-white/80"
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
               onClick={() => setLocation("/")}
               data-testid="button-back-home"
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-md transition-colors flex items-center gap-1 font-medium"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
-            </Button>
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
             <ThemeToggle />
           </div>
         </div>
