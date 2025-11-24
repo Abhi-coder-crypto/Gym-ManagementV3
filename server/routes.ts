@@ -5456,6 +5456,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get trainer details (public endpoint for clients to access their trainer)
+  app.get("/api/trainer/:id", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const trainer = await storage.getTrainer(req.params.id);
+      if (!trainer) {
+        return res.status(404).json({ message: "Trainer not found" });
+      }
+      res.json(trainer);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   app.get("/api/trainers/:id", authenticateToken, async (req, res) => {
     try {
       if (!req.user) {
