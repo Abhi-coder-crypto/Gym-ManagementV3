@@ -307,6 +307,7 @@ export function DietTemplateList() {
       description: formData.description,
       category: formData.category,
       targetCalories,
+      selectedDay: formData.selectedDay,
       isTemplate: true,
       meals: mealsObject,
     };
