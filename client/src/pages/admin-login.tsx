@@ -9,7 +9,7 @@ import { ArrowLeft, Shield, User } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import logoImage from "@assets/TWWLOGO_1763965276890.png";
-import bgImage from "@assets/admin_login_1763965600782.jpg";
+import bgImage from "@assets/admin_log_1763968144242.jpg";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
@@ -109,7 +109,7 @@ export default function AdminLogin() {
           <img
             src={bgImage}
             alt="Admin login background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
         </div>
