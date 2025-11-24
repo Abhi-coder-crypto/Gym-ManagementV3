@@ -60,7 +60,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
             <Button 
               variant="ghost" 
-              className={currentPage === 'dashboard' ? 'border-b-4 border-b-blue-500 rounded-none' : ''} 
+              className={currentPage === 'dashboard' ? 'nav-underline-blue' : ''} 
               onClick={() => setLocation("/client")}
               data-testid="link-dashboard"
             >
@@ -70,7 +70,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'sessions' ? 'border-b-4 border-b-purple-500 rounded-none' : ''} 
+              className={currentPage === 'sessions' ? 'nav-underline-purple' : ''} 
               onClick={() => setLocation("/client/sessions")}
               data-testid="link-sessions"
             >
@@ -80,7 +80,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'videos' ? 'border-b-4 border-b-red-500 rounded-none' : ''} 
+              className={currentPage === 'videos' ? 'nav-underline-red' : ''} 
               onClick={() => setLocation("/client/videos")}
               data-testid="link-videos"
             >
@@ -90,7 +90,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'diet' ? 'border-b-4 border-b-orange-500 rounded-none' : ''} 
+              className={currentPage === 'diet' ? 'nav-underline-orange' : ''} 
               onClick={() => setLocation("/client/diet")}
               data-testid="link-diet"
             >
@@ -100,7 +100,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={['weight-tracking', 'body-measurements', 'achievements', 'personal-records', 'monthly-reports', 'progress', 'goals'].includes(currentPage || '') ? 'border-b-4 border-b-green-500 rounded-none' : ''} data-testid="dropdown-progress">
+                <Button variant="ghost" className={['weight-tracking', 'body-measurements', 'achievements', 'personal-records', 'monthly-reports', 'progress', 'goals'].includes(currentPage || '') ? 'nav-underline-green' : ''} data-testid="dropdown-progress">
                   <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
                   {t('nav.progressAnalytics')}
                   <ChevronDown className="h-4 w-4 ml-1" />
