@@ -530,15 +530,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get all trainers (admin only - protected)
-  app.get("/api/admin/trainers", authenticateToken, requireAdmin, async (_req, res) => {
+  // Get all trainers (admin and trainers can view)
+  app.get("/api/admin/trainers", authenticateToken, requireRole('admin', 'trainer'), async (req, res) => {
     try {
       const trainers = await storage.getAllTrainers();
       // Remove passwords from response
-      const trainersWithoutPasswords = trainers.map(trainer => {
+      let trainersWithoutPasswords = trainers.map(trainer => {
         const { password: _, ...trainerWithoutPassword } = trainer.toObject();
         return trainerWithoutPassword;
       });
+      
+      // If user is a trainer, only return their own data
+      if (req.user?.role === 'trainer') {
+        trainersWithoutPasswords = trainersWithoutPasswords.filter(t => 
+          t._id?.toString() === req.user?.userId?.toString()
+        );
+      }
+      
       res.json(trainersWithoutPasswords);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -924,10 +932,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Client routes (admin only - protected)
-  app.get("/api/clients", authenticateToken, requireAdmin, async (_req, res) => {
+  // Client routes (admin and trainers can view)
+  app.get("/api/clients", authenticateToken, requireRole('admin', 'trainer'), async (req, res) => {
     try {
-      const clients = await storage.getAllClients();
+      let clients = await storage.getAllClients();
+      
+      // If user is a trainer, filter to show only their clients
+      if (req.user?.role === 'trainer') {
+        clients = clients.filter((client: any) => 
+          client.trainerId?.toString() === req.user?.userId?.toString()
+        );
+      }
+      
       res.json(clients);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
