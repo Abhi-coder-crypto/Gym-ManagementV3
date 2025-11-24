@@ -34,8 +34,11 @@ export default function AdminLogin() {
     const email = role === "admin" ? adminEmail : trainerEmail;
     const password = role === "admin" ? adminPassword : trainerPassword;
     
+    // Use role-specific login endpoints
+    const endpoint = role === "admin" ? '/api/admin/login' : '/api/trainer/login';
+    
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,20 +54,18 @@ export default function AdminLogin() {
 
       // Backend sets HTTP-only cookie automatically, just redirect
       // Frontend will query /api/auth/me to get current user
-      if (data.user.role === 'admin') {
+      if (role === 'admin') {
         toast({
           title: "Login successful",
           description: "Welcome to FitPro Admin Dashboard",
         });
         setLocation("/admin/dashboard");
-      } else if (data.user.role === 'trainer') {
+      } else if (role === 'trainer') {
         toast({
           title: "Login successful",
           description: "Welcome to FitPro Trainer Dashboard",
         });
         setLocation("/trainer/dashboard");
-      } else {
-        throw new Error('Invalid user role');
       }
     } catch (error: any) {
       toast({

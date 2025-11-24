@@ -12,12 +12,13 @@ declare global {
 
 /**
  * Authentication middleware - verifies JWT token from cookie
+ * Supports multiple cookie types: adminToken, trainerToken, or accessToken (for clients)
  * Attaches user data to req.user if token is valid
  */
 export function authenticateToken(req: Request, res: Response, next: NextFunction) {
   try {
-    // Get token from cookie
-    const token = req.cookies?.accessToken;
+    // Check for token in order of priority: adminToken, trainerToken, accessToken
+    const token = req.cookies?.adminToken || req.cookies?.trainerToken || req.cookies?.accessToken;
     
     if (!token) {
       return res.status(401).json({ 

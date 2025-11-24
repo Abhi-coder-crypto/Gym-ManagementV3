@@ -164,6 +164,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Generic login endpoint (backward compatibility)
   app.post("/api/auth/login", loginRateLimiter, async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -252,8 +253,136 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: error.message });
     }
   });
+
+  // Admin-specific login endpoint (sets adminToken cookie)
+  app.post("/api/admin/login", loginRateLimiter, async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+      
+      let user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      if (email.toLowerCase() === 'admin@fitpro.com' && user.role !== 'admin') {
+        await storage.updateUser(user._id.toString(), { role: 'admin' });
+        user = await storage.getUserByEmail(email);
+      }
+      
+      const isPasswordValid = await comparePassword(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      if (user.role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+      
+      const tokenPayload = {
+        userId: String(user._id),
+        email: user.email,
+        role: 'admin',
+        clientId: user.clientId?.toString(),
+      };
+      
+      console.log('✅ Admin login - Token payload:', { email: tokenPayload.email, role: tokenPayload.role });
+      
+      const accessToken = generateAccessToken(tokenPayload);
+      const refreshToken = generateRefreshToken(tokenPayload);
+      
+      res.cookie('adminToken', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+      
+      res.cookie('adminRefreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+      
+      const { password: _, ...userWithoutPassword } = user.toObject();
+      res.json({
+        message: "Admin login successful",
+        user: userWithoutPassword,
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Trainer-specific login endpoint (sets trainerToken cookie)
+  app.post("/api/trainer/login", loginRateLimiter, async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+      
+      let user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      if (email.toLowerCase() === 'trainer@fitpro.com' && user.role !== 'trainer') {
+        await storage.updateUser(user._id.toString(), { role: 'trainer' });
+        user = await storage.getUserByEmail(email);
+      }
+      
+      const isPasswordValid = await comparePassword(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      if (user.role !== 'trainer') {
+        return res.status(403).json({ message: "Trainer access required" });
+      }
+      
+      const tokenPayload = {
+        userId: String(user._id),
+        email: user.email,
+        role: 'trainer',
+        clientId: user.clientId?.toString(),
+      };
+      
+      console.log('✅ Trainer login - Token payload:', { email: tokenPayload.email, role: tokenPayload.role });
+      
+      const accessToken = generateAccessToken(tokenPayload);
+      const refreshToken = generateRefreshToken(tokenPayload);
+      
+      res.cookie('trainerToken', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+      
+      res.cookie('trainerRefreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+      
+      const { password: _, ...userWithoutPassword } = user.toObject();
+      res.json({
+        message: "Trainer login successful",
+        user: userWithoutPassword,
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
   
-  // Logout route
+  // Logout route - clears all session cookies
   app.post("/api/auth/logout", (req, res) => {
     res.clearCookie('accessToken', {
       httpOnly: true,
@@ -261,6 +390,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       sameSite: 'lax',
     });
     res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('adminToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('adminRefreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('trainerToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('trainerRefreshToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -276,6 +425,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       sameSite: 'lax',
     });
     res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('adminToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('adminRefreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('trainerToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('trainerRefreshToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
