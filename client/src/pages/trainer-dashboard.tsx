@@ -18,7 +18,15 @@ export default function TrainerDashboard() {
   const { data: authData } = useQuery<any>({
     queryKey: ['auth', 'trainer'],
     queryFn: async () => {
-      const response = await fetch('/api/auth/me?role=trainer');
+      // Use specific trainer token from sessionStorage, not admin token
+      const token = sessionStorage.getItem('trainerToken');
+      if (!token) throw new Error('Trainer not logged in');
+      
+      const response = await fetch('/api/auth/me?role=trainer', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!response.ok) throw new Error('Failed to fetch auth');
       return response.json();
     }

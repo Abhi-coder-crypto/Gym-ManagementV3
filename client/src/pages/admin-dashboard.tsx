@@ -19,7 +19,15 @@ export default function AdminDashboard() {
   const { data: authData } = useQuery<any>({
     queryKey: ['auth', 'admin'],
     queryFn: async () => {
-      const response = await fetch('/api/auth/me?role=admin');
+      // Use specific admin token from sessionStorage, not trainer token
+      const token = sessionStorage.getItem('adminToken');
+      if (!token) throw new Error('Admin not logged in');
+      
+      const response = await fetch('/api/auth/me?role=admin', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!response.ok) throw new Error('Failed to fetch auth');
       return response.json();
     }
