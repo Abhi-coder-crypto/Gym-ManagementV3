@@ -115,8 +115,8 @@ export default function ClientAccess() {
       <main className="relative z-10 min-h-screen flex items-center justify-center px-6">
         <Card className="w-full max-w-sm shadow-lg">
           <CardHeader className="space-y-3 pb-4">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-600 mx-auto">
-              <img src={logoImage} alt="FitPro" className="h-10 w-10 object-contain" />
+            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue-600 mx-auto">
+              <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
             </div>
             <div className="text-center">
               <CardTitle className="text-xl font-display">Client Login</CardTitle>
