@@ -322,19 +322,19 @@ export class MongoStorage implements IStorage {
   // Client methods
   async getAllClients(includeInactive: boolean = false): Promise<IClient[]> {
     const filter = includeInactive ? {} : { status: { $ne: 'inactive' } };
-    return await Client.find(filter).populate('packageId');
+    return await Client.find(filter).populate('packageId').populate('trainerId');
   }
 
   async getClient(id: string): Promise<IClient | null> {
-    return await Client.findById(id).populate('packageId');
+    return await Client.findById(id).populate('packageId').populate('trainerId');
   }
 
   async getClientByEmail(email: string): Promise<IClient | null> {
-    return await Client.findOne({ email: email.toLowerCase() }).populate('packageId');
+    return await Client.findOne({ email: email.toLowerCase() }).populate('packageId').populate('trainerId');
   }
 
   async getClientByPhone(phone: string): Promise<IClient | null> {
-    return await Client.findOne({ phone }).populate('packageId');
+    return await Client.findOne({ phone }).populate('packageId').populate('trainerId');
   }
 
   async createClient(data: Partial<IClient>): Promise<IClient> {
@@ -343,7 +343,7 @@ export class MongoStorage implements IStorage {
   }
 
   async updateClient(id: string, data: Partial<IClient>): Promise<IClient | null> {
-    return await Client.findByIdAndUpdate(id, data, { new: true }).populate('packageId');
+    return await Client.findByIdAndUpdate(id, data, { new: true }).populate('packageId').populate('trainerId');
   }
 
   async deleteClient(id: string): Promise<boolean> {
