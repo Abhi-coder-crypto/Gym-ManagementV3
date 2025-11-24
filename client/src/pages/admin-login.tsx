@@ -49,12 +49,9 @@ export default function AdminLogin() {
         throw new Error(data.message || 'Login failed');
       }
 
-      // Store user info in localStorage
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      // Redirect based on role
+      // Backend sets HTTP-only cookie automatically, just redirect
+      // Frontend will query /api/auth/me to get current user
       if (data.user.role === 'admin') {
-        localStorage.setItem('isAdmin', 'true');
         toast({
           title: "Login successful",
           description: "Welcome to FitPro Admin Dashboard",
