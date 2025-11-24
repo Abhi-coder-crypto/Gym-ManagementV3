@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator, LayoutDashboard, Flame } from "lucide-react";
+import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator, LayoutDashboard, Flame, Zap, Target, Camera, BarChart3 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/lib/language-context";
 import { queryClient } from "@/lib/queryClient";
@@ -106,33 +106,33 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
                   <ChevronDown className="h-4 w-4 ml-1" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-64">
-                <DropdownMenuItem onClick={() => setLocation("/client/progress/weight-tracking")} className={currentPage === 'weight-tracking' ? 'bg-accent' : ''} data-testid="link-weight-tracking">
-                  <Scale className="h-4 w-4 mr-2" />
-                  {t('nav.weightTracking')}
+              <DropdownMenuContent align="start" className="w-72">
+                <DropdownMenuItem onClick={() => setLocation("/client/progress/weight-tracking")} className={`cursor-pointer ${currentPage === 'weight-tracking' ? 'bg-blue-50 dark:bg-blue-950' : ''}`} data-testid="link-weight-tracking">
+                  <Scale className="h-4 w-4 mr-3 text-blue-600" />
+                  <span className="font-medium">{t('nav.weightTracking')}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLocation("/client/progress/body-measurements")} className={currentPage === 'body-measurements' ? 'bg-accent' : ''} data-testid="link-body-measurements">
-                  <Ruler className="h-4 w-4 mr-2" />
-                  {t('nav.bodyMeasurements')}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setLocation("/client/progress/personal-records")} className={currentPage === 'personal-records' ? 'bg-accent' : ''} data-testid="link-personal-records">
-                  <Trophy className="h-4 w-4 mr-2" />
-                  {t('nav.personalRecords')}
+                <DropdownMenuItem onClick={() => setLocation("/client/progress/body-measurements")} className={`cursor-pointer ${currentPage === 'body-measurements' ? 'bg-orange-50 dark:bg-orange-950' : ''}`} data-testid="link-body-measurements">
+                  <Ruler className="h-4 w-4 mr-3 text-orange-600" />
+                  <span className="font-medium">{t('nav.bodyMeasurements')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setLocation("/client/progress-photos")} className={currentPage === 'progress-photos' ? 'bg-accent' : ''} data-testid="link-progress-photos">
-                  <Image className="h-4 w-4 mr-2" />
-                  {t('nav.progressPhotos')}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLocation("/client/progress/monthly-reports")} className={currentPage === 'monthly-reports' ? 'bg-accent' : ''} data-testid="link-monthly-reports">
-                  <FileText className="h-4 w-4 mr-2" />
-                  {t('nav.monthlyReports')}
+                <DropdownMenuItem onClick={() => setLocation("/client/progress/personal-records")} className={`cursor-pointer ${currentPage === 'personal-records' ? 'bg-amber-50 dark:bg-amber-950' : ''}`} data-testid="link-personal-records">
+                  <Zap className="h-4 w-4 mr-3 text-amber-600" />
+                  <span className="font-medium">{t('nav.personalRecords')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setLocation("/client/calculators")} className={currentPage === 'calculators' ? 'bg-accent' : ''} data-testid="link-calculators">
-                  <Calculator className="h-4 w-4 mr-2" />
-                  Nutrition Calculators
+                <DropdownMenuItem onClick={() => setLocation("/client/progress-photos")} className={`cursor-pointer ${currentPage === 'progress-photos' ? 'bg-pink-50 dark:bg-pink-950' : ''}`} data-testid="link-progress-photos">
+                  <Camera className="h-4 w-4 mr-3 text-pink-600" />
+                  <span className="font-medium">{t('nav.progressPhotos')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLocation("/client/progress/monthly-reports")} className={`cursor-pointer ${currentPage === 'monthly-reports' ? 'bg-purple-50 dark:bg-purple-950' : ''}`} data-testid="link-monthly-reports">
+                  <BarChart3 className="h-4 w-4 mr-3 text-purple-600" />
+                  <span className="font-medium">{t('nav.monthlyReports')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setLocation("/client/calculators")} className={`cursor-pointer ${currentPage === 'calculators' ? 'bg-teal-50 dark:bg-teal-950' : ''}`} data-testid="link-calculators">
+                  <Calculator className="h-4 w-4 mr-3 text-teal-600" />
+                  <span className="font-medium">Nutrition Calculators</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
