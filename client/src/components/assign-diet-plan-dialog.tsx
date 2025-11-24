@@ -55,7 +55,8 @@ export function AssignDietPlanDialog({ open, onOpenChange, dietPlan }: AssignDie
   const dietTemplateId = String(fullDietPlan?._id || dietPlan?._id || '').trim();
   const dietTemplateName = fullDietPlan?.name || dietPlan?.name;
   
-  // Build Set of clients who already have this diet assigned
+  // Build Set of clients who already have this diet assigned FOR THIS SPECIFIC DAY
+  const selectedDay = fullDietPlan?.selectedDay || 'Monday';
   if (dietTemplateId && allDietPlans.length > 0) {
     allDietPlans.forEach((plan: any) => {
       // Check if this is an assigned plan (has clientId and is not a template)
@@ -63,14 +64,20 @@ export function AssignDietPlanDialog({ open, onOpenChange, dietPlan }: AssignDie
         const clientId = typeof plan.clientId === 'object' ? String(plan.clientId._id || plan.clientId) : String(plan.clientId);
         const clientName = typeof plan.clientId === 'object' ? (plan.clientId.name || '') : '';
         
-        // Match by template ID (most reliable)
+        // Get the day of this assigned plan (check meals or plan-level selectedDay)
+        let planDay = plan.selectedDay || 'Monday';
+        if (Array.isArray(plan.meals) && plan.meals.length > 0) {
+          planDay = plan.meals[0].dayOfWeek || planDay;
+        }
+        
+        // Match by template ID AND same day (most reliable)
         const planTemplateId = plan.templateId ? String(plan.templateId).trim() : '';
-        if (planTemplateId && dietTemplateId && planTemplateId === dietTemplateId) {
+        if (planTemplateId && dietTemplateId && planTemplateId === dietTemplateId && planDay === selectedDay) {
           clientsWithThisDiet.add(clientId.trim());
           if (clientName) assignedClientNames.push(clientName);
         }
-        // Also match by name as fallback for older assignments
-        else if (plan.name === dietTemplateName && dietTemplateName) {
+        // Also match by name AND day as fallback for older assignments
+        else if (plan.name === dietTemplateName && dietTemplateName && planDay === selectedDay) {
           clientsWithThisDiet.add(clientId.trim());
           if (clientName) assignedClientNames.push(clientName);
         }

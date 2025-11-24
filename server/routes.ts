@@ -2397,12 +2397,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.patch("/api/diet-plans/:id", authenticateToken, requireRole('admin', 'trainer'), async (req, res) => {
     try {
-      const plan = await storage.updateDietPlan(req.params.id, req.body);
+      const updateData = req.body;
+      
+      // Remove restricted fields to prevent unintended changes
+      delete updateData._id;
+      delete updateData.clientId;
+      delete updateData.createdAt;
+      
+      const plan = await storage.updateDietPlan(req.params.id, updateData);
       if (!plan) {
         return res.status(404).json({ message: "Diet plan not found" });
       }
-      res.json(plan);
+      
+      console.log(`[Diet Update] Successfully updated diet plan ${req.params.id}`);
+      res.json({ 
+        message: "Diet template updated successfully",
+        plan 
+      });
     } catch (error: any) {
+      console.error(`[Diet Update] Error updating diet plan:`, error);
       res.status(500).json({ message: error.message });
     }
   });
