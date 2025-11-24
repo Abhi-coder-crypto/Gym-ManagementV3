@@ -158,20 +158,6 @@ export default function TrainerLogin() {
                     Forgot Password?
                   </Button>
                 </div>
-                <div className="mt-4 text-center border-t pt-4">
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Are you an admin?
-                  </p>
-                  <Button
-                    variant="outline"
-                    type="button"
-                    className="w-full"
-                    onClick={() => setLocation("/admin")}
-                    data-testid="link-admin-login"
-                  >
-                    Login as Admin
-                  </Button>
-                </div>
               </form>
             </CardContent>
           </Card>
