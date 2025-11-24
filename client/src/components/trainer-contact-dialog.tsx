@@ -17,6 +17,7 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
   const [trainerPhone, setTrainerPhone] = useState<string | null>(null);
   const [trainerName, setTrainerName] = useState<string>("");
   const [clientId, setClientId] = useState<string | null>(null);
+  const [hasTrainer, setHasTrainer] = useState(false);
 
   useEffect(() => {
     const id = localStorage.getItem("clientId");
@@ -28,6 +29,14 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
     enabled: !!clientId && isProOrElite,
   });
 
+  useEffect(() => {
+    if (clientData?.trainerId) {
+      setHasTrainer(true);
+    } else {
+      setHasTrainer(false);
+    }
+  }, [clientData]);
+
   const { data: trainerData } = useQuery<any>({
     queryKey: ["/api/trainer", clientData?.trainerId],
     enabled: !!clientData?.trainerId && isProOrElite,
@@ -35,7 +44,6 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
 
   useEffect(() => {
     if (trainerData?.phone) {
-      // Format phone number for international format (remove spaces/hyphens if present)
       const formattedPhone = trainerData.phone.replace(/\D/g, "");
       setTrainerPhone(formattedPhone);
       setTrainerName(trainerData.name || "Your Trainer");
@@ -44,14 +52,12 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
 
   const handleCall = () => {
     if (trainerPhone) {
-      // Open phone dialer with trainer's number
       window.location.href = `tel:+${trainerPhone}`;
     }
   };
 
   const handleMessage = () => {
     if (trainerPhone) {
-      // Open WhatsApp with trainer's number
       const whatsappUrl = `https://wa.me/${trainerPhone}?text=Hi%20${encodeURIComponent(trainerName)}`;
       window.open(whatsappUrl, "_blank");
     }
@@ -68,7 +74,7 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
           variant="ghost" 
           size="icon"
           data-testid="button-call-trainer"
-          title="Contact Trainer"
+          title={hasTrainer ? "Contact Trainer" : "No trainer assigned"}
         >
           <Phone className="h-5 w-5" />
         </Button>
@@ -76,21 +82,21 @@ export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownP
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem
           onClick={handleCall}
-          disabled={!trainerPhone}
-          className="cursor-pointer gap-2"
+          disabled={!hasTrainer || !trainerPhone}
+          className={hasTrainer && trainerPhone ? "cursor-pointer gap-2" : "gap-2"}
           data-testid="dropdown-call"
         >
           <Phone className="h-4 w-4" />
-          <span>Call</span>
+          <span>{hasTrainer ? "Call" : "No trainer assigned"}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleMessage}
-          disabled={!trainerPhone}
-          className="cursor-pointer gap-2"
+          disabled={!hasTrainer || !trainerPhone}
+          className={hasTrainer && trainerPhone ? "cursor-pointer gap-2" : "gap-2"}
           data-testid="dropdown-message"
         >
           <MessageCircle className="h-4 w-4" />
-          <span>Message</span>
+          <span>{hasTrainer ? "Message" : "No trainer assigned"}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

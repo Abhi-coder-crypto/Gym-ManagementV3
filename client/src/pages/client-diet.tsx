@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ContactTrainerDialog } from "@/components/contact-trainer-dialog";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
@@ -42,6 +43,8 @@ export default function ClientDiet() {
   const [showDietaryReport, setShowDietaryReport] = useState(false);
   const [currentWeek, setCurrentWeek] = useState(1);
   const [clientId, setClientId] = useState<string | null>(null);
+  const [contactTrainerOpen, setContactTrainerOpen] = useState(false);
+  const hasDietPlan = !!currentPlan;
 
   useEffect(() => {
     const id = localStorage.getItem("clientId");
@@ -209,7 +212,7 @@ export default function ClientDiet() {
                   <p className="text-muted-foreground max-w-md mx-auto">
                     Your trainer hasn't assigned a diet plan yet. Please contact your trainer to get a personalized meal plan tailored to your fitness goals.
                   </p>
-                  <Button variant="outline" className="mt-4" data-testid="button-contact-trainer">
+                  <Button variant="outline" className="mt-4" onClick={() => setContactTrainerOpen(true)} data-testid="button-contact-trainer">
                     Contact Trainer
                   </Button>
                 </CardContent>

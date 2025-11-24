@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { ContactTrainerDialog } from "@/components/contact-trainer-dialog";
 import { Dumbbell, AlertCircle, Flame, TrendingUp, TrendingDown, Calendar } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
@@ -44,6 +45,7 @@ interface ClientData {
 
 export default function ClientWorkouts() {
   const [currentWeekDay, setCurrentWeekDay] = useState<string>("");
+  const [contactTrainerOpen, setContactTrainerOpen] = useState(false);
 
   const { data: assignedWorkouts = [], isLoading: isLoadingWorkouts, isError, error } = useQuery<WorkoutPlan[]>({
     queryKey: ['/api/workout-plans'],
@@ -247,7 +249,7 @@ export default function ClientWorkouts() {
               <p className="text-muted-foreground max-w-md mx-auto">
                 Your trainer hasn't assigned a workout plan yet. Please contact your trainer to get a personalized training program tailored to your fitness goals.
               </p>
-              <Button variant="outline" className="mt-4" data-testid="button-contact-trainer">
+              <Button variant="outline" className="mt-4" onClick={() => setContactTrainerOpen(true)} data-testid="button-contact-trainer">
                 Contact Trainer
               </Button>
             </CardContent>
