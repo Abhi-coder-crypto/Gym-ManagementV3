@@ -44,7 +44,6 @@ export default function ClientDiet() {
   const [currentWeek, setCurrentWeek] = useState(1);
   const [clientId, setClientId] = useState<string | null>(null);
   const [contactTrainerOpen, setContactTrainerOpen] = useState(false);
-  const hasDietPlan = !!currentPlan;
 
   useEffect(() => {
     const id = localStorage.getItem("clientId");
@@ -573,6 +572,7 @@ export default function ClientDiet() {
           </div>
         </DialogContent>
       </Dialog>
+      <ContactTrainerDialog open={contactTrainerOpen} onOpenChange={setContactTrainerOpen} />
       <MobileNavigation />
     </div>
   );

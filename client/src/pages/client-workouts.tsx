@@ -440,6 +440,7 @@ export default function ClientWorkouts() {
           </Card>
         </div>
       </main>
+      <ContactTrainerDialog open={contactTrainerOpen} onOpenChange={setContactTrainerOpen} />
     </div>
   );
 }
