@@ -69,8 +69,8 @@ export function AdminSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <div className="flex items-center gap-2 px-2 py-2 mb-2">
-            <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
+          <div className="flex items-center gap-3 px-2 py-4 mb-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-lg">
+            <img src={logoImage} alt="FitPro" className="h-16 w-16 object-contain" />
             <SidebarGroupLabel className="font-display text-lg m-0">
               FitPro Admin
             </SidebarGroupLabel>

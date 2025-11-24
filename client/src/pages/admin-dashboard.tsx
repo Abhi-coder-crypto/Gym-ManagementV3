@@ -103,6 +103,7 @@ export default function AdminDashboard() {
                   icon={Users}
                   trend={`${activeClients} active`}
                   trendUp={true}
+                  colorScheme="blue"
                 />
                 <StatCard
                   title="Active Users"
@@ -110,6 +111,7 @@ export default function AdminDashboard() {
                   icon={Activity}
                   trend={`${totalClients - activeClients} inactive`}
                   trendUp={true}
+                  colorScheme="green"
                 />
                 <StatCard
                   title="Total Trainers"
@@ -117,6 +119,7 @@ export default function AdminDashboard() {
                   icon={UserCheck}
                   trend="Team members"
                   trendUp={true}
+                  colorScheme="purple"
                 />
                 <StatCard
                   title="Monthly Revenue"
@@ -124,6 +127,7 @@ export default function AdminDashboard() {
                   icon={DollarSign}
                   trend={`From ${totalClients} clients`}
                   trendUp={true}
+                  colorScheme="orange"
                 />
                 <StatCard
                   title="Packages Available"
@@ -131,40 +135,41 @@ export default function AdminDashboard() {
                   icon={TrendingUp}
                   trend="Membership plans"
                   trendUp={true}
+                  colorScheme="pink"
                 />
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="font-display">Recent Clients</CardTitle>
+                <Card className="border-0 shadow-md">
+                  <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-t-lg">
+                    <CardTitle className="font-display text-blue-900 dark:text-blue-100">Recent Clients</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
+                  <CardContent className="pt-6">
+                    <div className="space-y-3">
                       {recentClients.map((client, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between gap-4 p-3 rounded-md hover-elevate"
+                          className="flex items-center justify-between gap-4 p-4 rounded-lg bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent border border-blue-100 dark:border-blue-800/30 hover-elevate transition-all"
                           data-testid={`row-client-${index}`}
                         >
-                          <div className="flex-1">
-                            <p className="font-semibold" data-testid="text-client-name">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-sm" data-testid="text-client-name">
                               {client.name}
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-xs text-muted-foreground">
                               Joined {client.joinedDate}
                             </p>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <Badge variant="outline" data-testid="badge-package">
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <Badge variant="outline" className="text-xs" data-testid="badge-package">
                               {client.package}
                             </Badge>
                             <Badge
-                              className={
+                              className={`text-xs font-semibold ${
                                 client.status === "active"
-                                  ? "bg-chart-3"
-                                  : "bg-muted"
-                              }
+                                  ? "bg-green-500/20 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700"
+                                  : "bg-gray-500/20 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700"
+                              }`}
                               data-testid="badge-status"
                             >
                               {client.status}
@@ -174,8 +179,7 @@ export default function AdminDashboard() {
                       ))}
                     </div>
                     <Button
-                      variant="outline"
-                      className="w-full mt-4"
+                      className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white"
                       onClick={() => setLocation('/admin/clients')}
                       data-testid="button-view-all-clients"
                     >
@@ -185,24 +189,40 @@ export default function AdminDashboard() {
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="font-display">Quick Actions</CardTitle>
+                <Card className="border-0 shadow-md">
+                  <CardHeader className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-t-lg">
+                    <CardTitle className="font-display text-orange-900 dark:text-orange-100">Quick Actions</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button className="w-full justify-start" variant="outline" data-testid="button-add-video">
+                  <CardContent className="pt-6 space-y-3">
+                    <Button 
+                      className="w-full justify-start bg-blue-500/10 hover:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-700" 
+                      variant="ghost"
+                      data-testid="button-add-video"
+                    >
                       <Video className="h-4 w-4 mr-2" />
                       Add New Video
                     </Button>
-                    <Button className="w-full justify-start" variant="outline" data-testid="button-schedule-session">
+                    <Button 
+                      className="w-full justify-start bg-purple-500/10 hover:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-700" 
+                      variant="ghost"
+                      data-testid="button-schedule-session"
+                    >
                       <Activity className="h-4 w-4 mr-2" />
                       Schedule Live Session
                     </Button>
-                    <Button className="w-full justify-start" variant="outline" data-testid="button-create-diet">
+                    <Button 
+                      className="w-full justify-start bg-green-500/10 hover:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-700" 
+                      variant="ghost"
+                      data-testid="button-create-diet"
+                    >
                       <TrendingUp className="h-4 w-4 mr-2" />
                       Create Diet Plan
                     </Button>
-                    <Button className="w-full justify-start" variant="outline" data-testid="button-view-analytics">
+                    <Button 
+                      className="w-full justify-start bg-orange-500/10 hover:bg-orange-500/20 text-orange-700 dark:text-orange-300 border border-orange-300 dark:border-orange-700" 
+                      variant="ghost"
+                      data-testid="button-view-analytics"
+                    >
                       <Users className="h-4 w-4 mr-2" />
                       View Analytics
                     </Button>
