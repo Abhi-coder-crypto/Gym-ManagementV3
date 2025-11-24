@@ -211,7 +211,7 @@ export default function AdminSessions() {
             <ThemeToggle />
           </header>
 
-          <main className="flex-1 overflow-auto p-8">
+          <main className="flex-1 overflow-auto p-8 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10">
             <div className="max-w-7xl mx-auto space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <p className="text-muted-foreground">Schedule and manage live training sessions with bookings and waitlists</p>

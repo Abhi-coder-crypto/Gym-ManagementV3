@@ -179,7 +179,7 @@ export default function TrainerDiet() {
             <ThemeToggle />
           </header>
 
-          <main className="flex-1 overflow-auto p-6">
+          <main className="flex-1 overflow-auto p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10">
             <div className="max-w-7xl mx-auto">
               <Tabs defaultValue="plans" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-6">

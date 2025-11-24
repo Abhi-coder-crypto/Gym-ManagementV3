@@ -372,7 +372,7 @@ export default function AdminTrainersEnhanced() {
             <ThemeToggle />
           </header>
 
-          <main className="flex-1 overflow-auto p-8">
+          <main className="flex-1 overflow-auto p-8 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10">
             <div className="space-y-6">
               {/* Header with Add Button */}
               <div className="flex flex-wrap items-center justify-between gap-4">
