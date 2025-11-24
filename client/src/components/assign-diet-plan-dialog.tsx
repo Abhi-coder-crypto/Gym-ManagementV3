@@ -103,40 +103,13 @@ export function AssignDietPlanDialog({ open, onOpenChange, dietPlan }: AssignDie
     mutationFn: async (clientIds: string[]) => {
       if (!dietPlan || !fullDietPlan) return;
       
-      // Deep clone the template's meals to avoid reference sharing
-      let templateMeals = JSON.parse(JSON.stringify(fullDietPlan.meals || []));
+      const planId = fullDietPlan._id || dietPlan._id;
       
-      // Ensure each meal has dayOfWeek set (from template or default)
-      if (Array.isArray(templateMeals)) {
-        templateMeals = templateMeals.map((meal: any) => ({
-          ...meal,
-          dayOfWeek: meal.dayOfWeek || fullDietPlan.selectedDay || 'Monday', // Preserve or use template's selectedDay
-          weekNumber: meal.weekNumber || 1,
-        }));
-      }
-      
-      // Use fullDietPlan with safe fallbacks to dietPlan for legacy data
-      const targetCals = fullDietPlan.targetCalories ?? dietPlan.calories;
-      const category = fullDietPlan.category ?? dietPlan.type;
-      const protein = fullDietPlan.protein ?? Math.round(targetCals * 0.30 / 4);
-      const carbs = fullDietPlan.carbs ?? Math.round(targetCals * 0.40 / 4);
-      const fats = fullDietPlan.fats ?? Math.round(targetCals * 0.30 / 9);
-      
+      // Assign the diet plan to each client using the proper assignment endpoint
       const assignments = clientIds.map(clientId => 
-        apiRequest('POST', '/api/diet-plans', {
-          clientId,
-          templateId: dietTemplateId, // Store reference to template for filtering
-          name: fullDietPlan.name ?? dietPlan.name,
-          description: fullDietPlan.description,
-          category, // New field
-          type: category, // Legacy field (same as category)
-          targetCalories: targetCals, // New field
-          calories: targetCals, // Legacy field (same as targetCalories)
-          protein,
-          carbs,
-          fats,
-          isTemplate: false, // Assigned plans are not templates
-          meals: templateMeals, // Deep clone per client with dayOfWeek preserved
+        apiRequest('POST', '/api/assign-diet', {
+          dietPlanId: planId,
+          clientId: clientId,
         })
       );
       
