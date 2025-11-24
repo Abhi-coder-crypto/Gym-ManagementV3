@@ -1,12 +1,12 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { TrainerSidebar } from "@/components/trainer-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { UtensilsCrossed, Dumbbell, UserPlus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
-import type { DietPlan } from "@shared/schema";
+import { DietTemplateList } from "@/components/diet-template-list";
+import { WorkoutPlanTemplates } from "@/components/workout-plan-templates";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function TrainerDiet() {
   const style = { "--sidebar-width": "16rem" };
@@ -17,18 +17,6 @@ export default function TrainerDiet() {
 
   const user = authData?.user;
   const trainerId = user?._id?.toString() || user?.id;
-
-  // Fetch trainer's diet plans + admin templates
-  const { data: dietPlans = [], isLoading: isLoadingPlans } = useQuery<DietPlan[]>({
-    queryKey: ['/api/trainers', trainerId, 'diet-plans'],
-    enabled: !!trainerId
-  });
-
-  // Fetch trainer's workout plans + admin templates
-  const { data: workoutPlans = [], isLoading: isLoadingWorkouts } = useQuery<any[]>({
-    queryKey: ['/api/trainers', trainerId, 'workout-plans'],
-    enabled: !!trainerId
-  });
 
   // Fetch trainer's client assignments
   const { data: clientAssignments = [], isLoading: isLoadingAssignments } = useQuery<any[]>({
@@ -58,7 +46,7 @@ export default function TrainerDiet() {
                 <TabsList className="grid w-full grid-cols-3 mb-6">
                   <TabsTrigger value="diet" data-testid="tab-diet-templates">
                     <UtensilsCrossed className="h-4 w-4 mr-2" />
-                    Diet Plans
+                    Diet Templates
                   </TabsTrigger>
                   <TabsTrigger value="workout" data-testid="tab-workout-plans">
                     <Dumbbell className="h-4 w-4 mr-2" />
@@ -70,119 +58,21 @@ export default function TrainerDiet() {
                   </TabsTrigger>
                 </TabsList>
 
-                {/* Diet Plans Tab */}
+                {/* Diet Templates Tab */}
                 <TabsContent value="diet" className="space-y-4">
-                  <div className="mb-4">
-                    <h2 className="text-xl font-bold">Diet Plans & Templates</h2>
-                    <p className="text-sm text-muted-foreground mt-1">View available diet plans including your templates and admin templates</p>
-                  </div>
-
-                  {isLoadingPlans ? (
-                    <Card>
-                      <CardContent className="py-8 text-center text-muted-foreground">
-                        Loading diet plans...
-                      </CardContent>
-                    </Card>
-                  ) : dietPlans.length === 0 ? (
-                    <Card>
-                      <CardContent className="py-12 text-center text-muted-foreground">
-                        No diet plans available.
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <div className="grid gap-4 md:grid-cols-2">
-                      {dietPlans.map((plan: any) => (
-                        <Card key={plan._id} className="hover-elevate" data-testid={`card-diet-plan-${plan._id}`}>
-                          <CardHeader>
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1">
-                                <CardTitle className="line-clamp-1">{plan.name}</CardTitle>
-                                <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
-                              </div>
-                              <div className="flex gap-2">
-                                {plan.isTemplate && (
-                                  <Badge variant="secondary">Admin Template</Badge>
-                                )}
-                              </div>
-                            </div>
-                          </CardHeader>
-                          <CardContent className="space-y-3">
-                            <div className="grid grid-cols-2 gap-3 text-sm">
-                              <div>
-                                <p className="text-muted-foreground">Target Calories</p>
-                                <p className="font-semibold">{plan.targetCalories} cal/day</p>
-                              </div>
-                              <div>
-                                <p className="text-muted-foreground">Meals</p>
-                                <p className="font-semibold">{plan.meals?.length || 0}</p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
+                  <DietTemplateList isTrainer={true} trainerId={trainerId} />
                 </TabsContent>
 
                 {/* Workout Plans Tab */}
                 <TabsContent value="workout" className="space-y-4">
-                  <div className="mb-4">
-                    <h2 className="text-xl font-bold">Workout Plans & Templates</h2>
-                    <p className="text-sm text-muted-foreground mt-1">View available workout plans including your templates and admin templates</p>
-                  </div>
-
-                  {isLoadingWorkouts ? (
-                    <Card>
-                      <CardContent className="py-8 text-center text-muted-foreground">
-                        Loading workout plans...
-                      </CardContent>
-                    </Card>
-                  ) : workoutPlans.length === 0 ? (
-                    <Card>
-                      <CardContent className="py-12 text-center text-muted-foreground">
-                        No workout plans available.
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <div className="grid gap-4 md:grid-cols-2">
-                      {workoutPlans.map((plan: any) => (
-                        <Card key={plan._id} className="hover-elevate" data-testid={`card-workout-plan-${plan._id}`}>
-                          <CardHeader>
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1">
-                                <CardTitle className="line-clamp-1">{plan.name}</CardTitle>
-                                <p className="text-sm text-muted-foreground mt-1">{plan.description || plan.goal}</p>
-                              </div>
-                              <div className="flex gap-2">
-                                {plan.isTemplate && (
-                                  <Badge variant="secondary">Admin Template</Badge>
-                                )}
-                              </div>
-                            </div>
-                          </CardHeader>
-                          <CardContent className="space-y-3">
-                            <div className="grid grid-cols-2 gap-3 text-sm">
-                              <div>
-                                <p className="text-muted-foreground">Duration</p>
-                                <p className="font-semibold">{plan.durationWeeks || plan.duration || 4} weeks</p>
-                              </div>
-                              <div>
-                                <p className="text-muted-foreground">Goal</p>
-                                <p className="font-semibold">{plan.goal || 'N/A'}</p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
+                  <WorkoutPlanTemplates isTrainer={true} trainerId={trainerId} />
                 </TabsContent>
 
                 {/* My Assignments Tab */}
                 <TabsContent value="assignments" className="space-y-4">
                   <div className="mb-4">
                     <h2 className="text-xl font-bold">Diet & Workout Assignments</h2>
-                    <p className="text-sm text-muted-foreground mt-1">View diet and workout plans assigned to your {clientAssignments.length} clients</p>
+                    <p className="text-sm text-muted-foreground mt-1">View diet and workout plans you've assigned to your {clientAssignments.length} clients</p>
                   </div>
 
                   {isLoadingAssignments ? (
@@ -201,18 +91,21 @@ export default function TrainerDiet() {
                     <div className="space-y-4">
                       {clientAssignments.map((client: any) => (
                         <Card key={client._id} className="hover-elevate" data-testid={`card-assignment-${client._id}`}>
-                          <CardHeader>
-                            <CardTitle className="text-lg">{client.name}</CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
+                          <CardContent className="pt-6 space-y-4">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h3 className="font-semibold">{client.name}</h3>
+                                <p className="text-sm text-muted-foreground">{client.email}</p>
+                              </div>
+                            </div>
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <p className="text-sm font-medium mb-2">Diet Assignments</p>
-                                <p className="text-sm text-muted-foreground">{client.dietPlans?.length || 0} diet plans assigned</p>
+                                <p className="text-sm font-medium mb-2">Diet Plans</p>
+                                <p className="text-sm text-muted-foreground">{client.dietPlans?.length || 0} assigned</p>
                               </div>
                               <div>
-                                <p className="text-sm font-medium mb-2">Workout Assignments</p>
-                                <p className="text-sm text-muted-foreground">{client.workoutPlans?.length || 0} workout plans assigned</p>
+                                <p className="text-sm font-medium mb-2">Workout Plans</p>
+                                <p className="text-sm text-muted-foreground">{client.workoutPlans?.length || 0} assigned</p>
                               </div>
                             </div>
                           </CardContent>

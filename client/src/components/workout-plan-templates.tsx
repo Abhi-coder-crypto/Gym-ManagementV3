@@ -44,7 +44,7 @@ interface WorkoutPlanFormData {
 }
 
 // Force rebuild - filters should display
-export function WorkoutPlanTemplates() {
+export function WorkoutPlanTemplates({ isTrainer = false, trainerId = '' }: { isTrainer?: boolean; trainerId?: string }) {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");

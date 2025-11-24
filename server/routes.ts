@@ -2368,8 +2368,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Workout Plan routes
   app.get("/api/workout-plan-templates", authenticateToken, requireRole('admin', 'trainer'), async (req, res) => {
     try {
-      const templates = await storage.getWorkoutPlanTemplates();
-      res.json(templates);
+      let allPlans = await WorkoutPlan.find({ isTemplate: true }).lean();
+      
+      // Add template source badge
+      const templatesWithSource = allPlans.map((plan: any) => {
+        const isAdminTemplate = plan.createdBy?.toString().includes('admin') || !plan.createdBy;
+        return {
+          ...plan,
+          templateSource: isAdminTemplate ? 'admin' : 'trainer',
+          isTemplate: true
+        };
+      });
+      
+      res.json(templatesWithSource);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -2380,7 +2391,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const templateData = {
         ...req.body,
         isTemplate: true,
-        createdBy: req.user?.role || 'admin',
+        createdBy: req.user?.userId || req.user?.id || 'admin',
       };
       const template = await storage.createWorkoutPlan(templateData);
       res.json(template);
@@ -2741,11 +2752,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Diet Plan Template routes
-  app.get("/api/diet-plan-templates", async (req, res) => {
+  app.get("/api/diet-plan-templates", authenticateToken, async (req, res) => {
     try {
       const category = req.query.category as string | undefined;
-      const templates = await storage.getDietPlanTemplates(category);
-      res.json(templates);
+      let allPlans = await DietPlan.find({ isTemplate: true }).lean();
+      
+      // Filter by category if provided
+      if (category && category !== 'all') {
+        allPlans = allPlans.filter((plan: any) => plan.category === category);
+      }
+      
+      // Add template source badge
+      const templatesWithSource = allPlans.map((plan: any) => {
+        const isAdminTemplate = plan.createdBy?.toString().includes('admin') || !plan.createdBy;
+        return {
+          ...plan,
+          templateSource: isAdminTemplate ? 'admin' : 'trainer',
+          isTemplate: true
+        };
+      });
+      
+      res.json(templatesWithSource);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -2783,14 +2810,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/diet-plans-with-assignments", authenticateToken, async (req, res) => {
     try {
-      let plans = await storage.getAllDietPlansWithAssignments();
+      const allClients = await storage.getAllClients();
       
       // Filter by trainer if user is a trainer
+      let clients = allClients;
       if (req.user?.role === 'trainer') {
-        plans = plans.filter((plan: any) => plan.trainerId?.toString() === req.user?.userId?.toString());
+        clients = clients.filter((client: any) => client.trainerId?.toString() === req.user?.userId?.toString());
       }
       
-      res.json(plans);
+      // Get assignments for each client
+      const assignments = await Promise.all(
+        clients.map(async (client: any) => {
+          const dietPlans = await storage.getClientDietPlans(client._id.toString());
+          const workoutPlans = await storage.getClientWorkoutPlans(client._id.toString());
+          
+          return {
+            _id: client._id,
+            clientName: client.name,
+            clientEmail: client.email,
+            trainerId: client.trainerId,
+            dietPlanName: dietPlans.length > 0 ? dietPlans[0].name : null,
+            workoutPlanName: workoutPlans.length > 0 ? workoutPlans[0].name : null,
+            dietPlanId: dietPlans.length > 0 ? dietPlans[0]._id : null,
+            workoutPlanId: workoutPlans.length > 0 ? workoutPlans[0]._id : null,
+          };
+        })
+      );
+      
+      // Filter out clients with no assignments
+      const assignmentsWithPlans = assignments.filter(
+        (a: any) => a.dietPlanName || a.workoutPlanName
+      );
+      
+      res.json(assignmentsWithPlans);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -5465,15 +5517,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const trainerPlans = await storage.getTrainerDietPlans(req.params.trainerId);
       
-      // Also fetch admin-created templates that are shared with all trainers
-      const allPlans = await DietPlan.find().lean();
-      const adminTemplates = allPlans.filter((plan: any) => {
-        // Include plans created by admin (marked with isTemplate or where createdBy is admin user)
-        return plan.createdBy && (plan.createdBy.toString().includes('admin') || plan.isTemplate === true);
+      // Fetch all templates (both admin and trainer-created) that are marked as templates
+      const allPlans = await DietPlan.find({ isTemplate: true }).lean();
+      const templates = allPlans.map((plan: any) => {
+        const isAdminTemplate = plan.createdBy?.toString().includes('admin') || !plan.createdBy;
+        return {
+          ...plan,
+          templateSource: isAdminTemplate ? 'admin' : 'trainer'
+        };
       });
       
-      // Combine trainer's plans with admin templates
-      const combined = [...trainerPlans, ...adminTemplates];
+      // Combine trainer's plans with all templates
+      const combined = [...trainerPlans, ...templates];
       res.json(combined);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -5496,17 +5551,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied. You can only access your own workout plans." });
       }
       
-      // Get all workout plans
-      const allPlans = await WorkoutPlan.find().lean();
+      const trainerPlans = await storage.getTrainerWorkoutPlans(req.params.trainerId);
       
-      // Filter for trainer's own plans and admin templates
-      const plans = allPlans.filter((plan: any) => {
-        const isTrainerOwned = plan.createdBy?.toString() === req.params.trainerId || plan.createdBy === req.params.trainerId;
-        const isAdminTemplate = plan.createdBy && (plan.createdBy.toString().includes('admin') || plan.isTemplate === true);
-        return isTrainerOwned || isAdminTemplate;
+      // Fetch all templates (both admin and trainer-created) that are marked as templates
+      const allPlans = await WorkoutPlan.find({ isTemplate: true }).lean();
+      const templates = allPlans.map((plan: any) => {
+        const isAdminTemplate = plan.createdBy?.toString().includes('admin') || !plan.createdBy;
+        return {
+          ...plan,
+          templateSource: isAdminTemplate ? 'admin' : 'trainer'
+        };
       });
       
-      res.json(plans);
+      // Combine trainer's plans with all templates
+      const combined = [...trainerPlans, ...templates];
+      res.json(combined);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

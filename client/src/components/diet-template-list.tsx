@@ -65,7 +65,7 @@ const MEAL_TYPES = [
   { value: 'dinner', label: 'Dinner' },
 ];
 
-export function DietTemplateList() {
+export function DietTemplateList({ isTrainer = false, trainerId = '' }: { isTrainer?: boolean; trainerId?: string }) {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -383,11 +383,19 @@ export function DietTemplateList() {
               <CardHeader>
                 <CardTitle className="flex items-start justify-between gap-2">
                   <span className="line-clamp-2">{template.name}</span>
-                  {template.category && (
-                    <Badge variant="default">
-                      {DIET_CATEGORIES.find(c => c.value === template.category)?.label || template.category}
-                    </Badge>
-                  )}
+                  <div className="flex gap-1 flex-wrap">
+                    {template.templateSource === 'admin' && (
+                      <Badge variant="secondary">Admin Template</Badge>
+                    )}
+                    {template.templateSource === 'trainer' && (
+                      <Badge variant="secondary">Trainer Template</Badge>
+                    )}
+                    {template.category && (
+                      <Badge variant="default">
+                        {DIET_CATEGORIES.find(c => c.value === template.category)?.label || template.category}
+                      </Badge>
+                    )}
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
