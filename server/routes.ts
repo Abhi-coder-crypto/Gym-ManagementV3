@@ -5480,6 +5480,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/trainers/:trainerId/workout-plans", authenticateToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      // Only trainers and admins can access trainer endpoints
+      if (req.user.role !== 'trainer' && req.user.role !== 'admin') {
+        return res.status(403).json({ message: "Access denied. Trainer or admin role required." });
+      }
+      
+      // Trainers can only access their own workout plans; admins can access any trainer's plans
+      if (req.user.role === 'trainer' && String(req.user.userId) !== req.params.trainerId) {
+        return res.status(403).json({ message: "Access denied. You can only access your own workout plans." });
+      }
+      
+      // Get all workout plans
+      const allPlans = await WorkoutPlan.find().lean();
+      
+      // Filter for trainer's own plans and admin templates
+      const plans = allPlans.filter((plan: any) => {
+        const isTrainerOwned = plan.createdBy?.toString() === req.params.trainerId || plan.createdBy === req.params.trainerId;
+        const isAdminTemplate = plan.createdBy && (plan.createdBy.toString().includes('admin') || plan.isTemplate === true);
+        return isTrainerOwned || isAdminTemplate;
+      });
+      
+      res.json(plans);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   app.get("/api/trainers/:trainerId/meals", authenticateToken, async (req, res) => {
     try {
       if (!req.user) {
@@ -5524,8 +5556,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied. You can only access your own sessions." });
       }
       
-      const sessions = await storage.getTrainerSessions(req.params.trainerId);
-      res.json(sessions);
+      // Get trainer's own sessions + admin-created sessions assigned to this trainer
+      const trainerSessions = await storage.getTrainerSessions(req.params.trainerId);
+      
+      // Also fetch all admin-created sessions that are assigned to this trainer
+      const allSessions = await LiveSession.find().lean();
+      const adminSessions = allSessions.filter((session: any) => {
+        // Include sessions created by admin and assigned to this trainer
+        const createdByAdmin = session.createdBy && session.createdBy.toString().includes('admin');
+        const assignedToTrainer = session.trainerName === req.params.trainerId || session.assignedTrainers?.includes(req.params.trainerId);
+        return createdByAdmin && assignedToTrainer;
+      });
+      
+      // Combine trainer's own sessions with assigned admin sessions
+      const combined = [...trainerSessions, ...adminSessions];
+      res.json(combined);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
