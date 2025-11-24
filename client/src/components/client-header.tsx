@@ -160,17 +160,7 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
           <div className="hidden md:flex items-center gap-1 flex-shrink-0">
             <SessionReminders />
             <ThemeToggle />
-            {isProOrElite && (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => setContactDialogOpen(true)}
-                data-testid="button-call-trainer"
-                title="Contact Trainer"
-              >
-                <Phone className="h-5 w-5" />
-              </Button>
-            )}
+            <TrainerContactDropdown isProOrElite={isProOrElite} />
             <Button 
               variant="ghost" 
               size="icon" 
@@ -193,8 +183,6 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
             </Button>
           </div>
         </div>
-
-        <TrainerContactDialog open={contactDialogOpen} onOpenChange={setContactDialogOpen} />
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
