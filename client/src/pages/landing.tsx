@@ -9,7 +9,7 @@ export default function Landing() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen">
+    <div className="h-screen overflow-hidden">
       <header className="absolute top-0 left-0 right-0 z-10">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -22,7 +22,7 @@ export default function Landing() {
         </div>
       </header>
 
-      <section className="relative min-h-screen flex items-center justify-center">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={heroImage}

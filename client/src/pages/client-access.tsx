@@ -79,7 +79,7 @@ export default function ClientAccess() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="h-screen overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           src={backgroundImage}
@@ -112,9 +112,7 @@ export default function ClientAccess() {
         </div>
       </header>
 
-      <div className="pt-24"></div>
-
-      <main className="relative min-h-screen flex items-center justify-center px-6">
+      <main className="relative h-screen flex items-center justify-center px-6 overflow-hidden">
         <Card className="w-full max-w-sm shadow-lg">
           <CardHeader className="space-y-2 pb-2">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mx-auto">
