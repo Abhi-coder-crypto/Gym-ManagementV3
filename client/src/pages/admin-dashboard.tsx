@@ -37,14 +37,41 @@ export default function AdminDashboard() {
 
   const { data: clients = [] } = useQuery<any[]>({
     queryKey: ['/api/clients'],
+    queryFn: async () => {
+      const token = sessionStorage.getItem('adminToken');
+      if (!token) throw new Error('Admin not logged in');
+      const response = await fetch('/api/clients', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Failed to fetch clients');
+      return response.json();
+    }
   });
 
   const { data: trainers = [] } = useQuery<any[]>({
     queryKey: ['/api/admin/trainers'],
+    queryFn: async () => {
+      const token = sessionStorage.getItem('adminToken');
+      if (!token) throw new Error('Admin not logged in');
+      const response = await fetch('/api/admin/trainers', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Failed to fetch trainers');
+      return response.json();
+    }
   });
 
   const { data: packages = [] } = useQuery<any[]>({
     queryKey: ['/api/packages'],
+    queryFn: async () => {
+      const token = sessionStorage.getItem('adminToken');
+      if (!token) throw new Error('Admin not logged in');
+      const response = await fetch('/api/packages', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Failed to fetch packages');
+      return response.json();
+    }
   });
 
   const packageById = packages.reduce((map, pkg) => {

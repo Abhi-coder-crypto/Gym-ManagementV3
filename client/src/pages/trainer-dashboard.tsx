@@ -37,16 +37,43 @@ export default function TrainerDashboard() {
 
   const { data: clients = [] } = useQuery<Client[]>({
     queryKey: ['/api/trainers', trainerId, 'clients'],
+    queryFn: async () => {
+      const token = sessionStorage.getItem('trainerToken');
+      if (!token) throw new Error('Trainer not logged in');
+      const response = await fetch(`/api/trainers/${trainerId}/clients`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Failed to fetch clients');
+      return response.json();
+    },
     enabled: !!trainerId
   });
 
   const { data: sessions = [] } = useQuery<LiveSession[]>({
     queryKey: ['/api/trainers', trainerId, 'sessions'],
+    queryFn: async () => {
+      const token = sessionStorage.getItem('trainerToken');
+      if (!token) throw new Error('Trainer not logged in');
+      const response = await fetch(`/api/trainers/${trainerId}/sessions`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Failed to fetch sessions');
+      return response.json();
+    },
     enabled: !!trainerId
   });
 
   const { data: videos = [] } = useQuery<VideoType[]>({
     queryKey: ['/api/videos'],
+    queryFn: async () => {
+      const token = sessionStorage.getItem('trainerToken');
+      if (!token) throw new Error('Trainer not logged in');
+      const response = await fetch('/api/videos', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Failed to fetch videos');
+      return response.json();
+    },
     enabled: !!trainerId
   });
 

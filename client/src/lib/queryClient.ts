@@ -7,13 +7,19 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-function getAuthHeaders() {
+function getAuthHeaders(role?: 'admin' | 'trainer') {
   const headers: Record<string, string> = {};
-  const adminToken = sessionStorage.getItem('adminToken');
-  const trainerToken = sessionStorage.getItem('trainerToken');
+  let token: string | null = null;
   
-  // Use whichever token is available
-  const token = adminToken || trainerToken;
+  if (role === 'admin') {
+    token = sessionStorage.getItem('adminToken');
+  } else if (role === 'trainer') {
+    token = sessionStorage.getItem('trainerToken');
+  } else {
+    // Default: try tokens in order (trainer, then admin for backward compat)
+    token = sessionStorage.getItem('trainerToken') || sessionStorage.getItem('adminToken');
+  }
+  
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
