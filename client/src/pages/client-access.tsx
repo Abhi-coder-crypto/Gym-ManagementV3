@@ -101,7 +101,7 @@ export default function ClientAccess() {
             <Button
               variant="ghost"
               className="text-white hover:text-white/80"
-              onClick={() => window.history.back()}
+              onClick={() => setLocation("/")}
               data-testid="button-back-home"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
