@@ -255,15 +255,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Logout route
   app.post("/api/auth/logout", (req, res) => {
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
     res.json({ message: "Logged out successfully" });
   });
   
   // Also support /api/logout for backward compatibility
   app.post("/api/logout", (req, res) => {
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
     res.json({ message: "Logged out successfully" });
   });
   
