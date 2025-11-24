@@ -103,7 +103,7 @@ export default function AdminDashboard() {
                   icon={Users}
                   trend={`${activeClients} active`}
                   trendUp={true}
-                  colorScheme="blue"
+                  colorScheme="red"
                 />
                 <StatCard
                   title="Active Users"
@@ -141,15 +141,15 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <Card className="border-0 shadow-md">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-t-lg">
-                    <CardTitle className="font-display text-blue-900 dark:text-blue-100">Recent Clients</CardTitle>
+                  <CardHeader className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-t-lg">
+                    <CardTitle className="font-display text-amber-900 dark:text-amber-100">Recent Clients</CardTitle>
                   </CardHeader>
                   <CardContent className="pt-6">
                     <div className="space-y-3">
                       {recentClients.map((client, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between gap-4 p-4 rounded-lg bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent border border-blue-100 dark:border-blue-800/30 hover-elevate transition-all"
+                          className="flex items-center justify-between gap-4 p-4 rounded-lg bg-gradient-to-r from-amber-50/50 to-transparent dark:from-amber-900/10 dark:to-transparent border border-amber-100 dark:border-amber-800/30 hover-elevate transition-all"
                           data-testid={`row-client-${index}`}
                         >
                           <div className="flex-1 min-w-0">

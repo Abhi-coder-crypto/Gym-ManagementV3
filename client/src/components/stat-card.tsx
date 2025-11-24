@@ -6,15 +6,15 @@ interface StatCardProps {
   icon: LucideIcon;
   trend?: string;
   trendUp?: boolean;
-  colorScheme?: 'blue' | 'purple' | 'orange' | 'green' | 'pink' | 'cyan';
+  colorScheme?: 'red' | 'purple' | 'orange' | 'green' | 'pink' | 'cyan';
 }
 
 const colorSchemes = {
-  blue: {
-    bg: 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30',
-    icon: 'text-blue-600 dark:text-blue-400',
-    text: 'text-blue-900 dark:text-blue-100',
-    badge: 'text-blue-700 dark:text-blue-300'
+  red: {
+    bg: 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/30',
+    icon: 'text-red-600 dark:text-red-400',
+    text: 'text-red-900 dark:text-red-100',
+    badge: 'text-red-700 dark:text-red-300'
   },
   purple: {
     bg: 'bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30',

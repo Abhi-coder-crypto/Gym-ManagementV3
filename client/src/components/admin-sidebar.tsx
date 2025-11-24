@@ -66,17 +66,17 @@ export function AdminSidebar() {
   };
 
   return (
-    <Sidebar className="bg-white dark:bg-white">
-      <SidebarContent>
-        <SidebarGroup>
+    <Sidebar className="bg-white dark:bg-white border-r border-gray-200 dark:border-gray-800">
+      <SidebarContent className="bg-white dark:bg-white">
+        <SidebarGroup className="bg-white dark:bg-white">
           <div className="flex items-center gap-3 px-2 py-4 mb-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-lg">
             <img src={logoImage} alt="FitPro" className="h-16 w-16 object-contain" />
             <SidebarGroupLabel className="font-display text-lg m-0">
               FitPro Admin
             </SidebarGroupLabel>
           </div>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarGroupContent className="bg-white dark:bg-white">
+            <SidebarMenu className="bg-white dark:bg-white">
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
@@ -95,8 +95,8 @@ export function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
+      <SidebarFooter className="bg-white dark:bg-white">
+        <SidebarMenu className="bg-white dark:bg-white">
           {currentUser && (
             <SidebarMenuItem>
               <div className="flex items-center gap-3 px-2 py-2 text-sm" data-testid="profile-info">
