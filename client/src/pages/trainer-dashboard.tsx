@@ -16,7 +16,7 @@ export default function TrainerDashboard() {
   };
 
   const { data: authData } = useQuery<any>({
-    queryKey: ['/api/auth/me']
+    queryKey: ['/api/auth/me?role=trainer']
   });
 
   const user = authData?.user;

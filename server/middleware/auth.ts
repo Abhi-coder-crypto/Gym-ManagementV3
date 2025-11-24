@@ -17,8 +17,20 @@ declare global {
  */
 export function authenticateToken(req: Request, res: Response, next: NextFunction) {
   try {
-    // Check for token in order of priority: adminToken, trainerToken, accessToken
-    const token = req.cookies?.adminToken || req.cookies?.trainerToken || req.cookies?.accessToken;
+    // Check for role preference from query param or header
+    const preferredRole = req.query.role || req.headers['x-role-preference'];
+    
+    let token: string | undefined;
+    
+    // If a specific role is preferred, try that token first
+    if (preferredRole === 'trainer') {
+      token = req.cookies?.trainerToken || req.cookies?.adminToken || req.cookies?.accessToken;
+    } else if (preferredRole === 'admin') {
+      token = req.cookies?.adminToken || req.cookies?.trainerToken || req.cookies?.accessToken;
+    } else {
+      // Default priority: adminToken, trainerToken, accessToken
+      token = req.cookies?.adminToken || req.cookies?.trainerToken || req.cookies?.accessToken;
+    }
     
     if (!token) {
       return res.status(401).json({ 
