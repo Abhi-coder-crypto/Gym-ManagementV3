@@ -9,6 +9,7 @@ import { ArrowLeft, Shield, User } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import logoImage from "@assets/TWWLOGO_1763965276890.png";
+import bgImage from "@assets/admin_login_1763965600782.jpg";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
@@ -80,8 +81,17 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
+    <div className="min-h-screen relative">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={bgImage}
+          alt="Admin login background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
+      </div>
+      <div className="relative z-10">
+      <header className="border-b border-white/20 bg-black/30 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img src={logoImage} alt="FitPro" className="h-20 w-20 object-contain" />
@@ -94,6 +104,7 @@ export default function AdminLogin() {
               variant="ghost"
               onClick={() => setLocation("/")}
               data-testid="button-back-home"
+              className="text-white hover:text-white"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
@@ -235,6 +246,7 @@ export default function AdminLogin() {
           </CardContent>
         </Card>
       </main>
+      </div>
     </div>
   );
 }
