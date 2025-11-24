@@ -5,8 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Plus, X } from "lucide-react";
-import { useState } from "react";
+import { Loader2, Plus, X, Upload } from "lucide-react";
+import { useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -18,6 +18,10 @@ interface UploadVideoModalProps {
 
 export function UploadVideoModal({ open, onOpenChange }: UploadVideoModalProps) {
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState<string>("");
+  
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -64,6 +68,7 @@ export function UploadVideoModal({ open, onOpenChange }: UploadVideoModalProps) 
         isDraft: false,
       });
       setEquipment([]);
+      setUploadedFileName("");
       onOpenChange(false);
     },
     onError: () => {
@@ -80,7 +85,7 @@ export function UploadVideoModal({ open, onOpenChange }: UploadVideoModalProps) 
     if (!formData.title || !formData.url || !formData.category) {
       toast({
         title: "Missing required fields",
-        description: "Please fill in all required fields (Title, URL, Category).",
+        description: "Please fill in all required fields (Title, Video URL, Category).",
         variant: "destructive",
       });
       return;
@@ -97,6 +102,63 @@ export function UploadVideoModal({ open, onOpenChange }: UploadVideoModalProps) 
 
   const removeEquipment = (item: string) => {
     setEquipment(equipment.filter(e => e !== item));
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      // Check if it's a video file
+      if (file.type.startsWith('video/')) {
+        handleFileSelect(file);
+      } else {
+        toast({
+          title: "Invalid file type",
+          description: "Please drop a video file (MP4, WebM, MOV, etc.)",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleFileSelect = (file: File) => {
+    // Create a local URL for the video file
+    const videoUrl = URL.createObjectURL(file);
+    setFormData({ ...formData, url: videoUrl });
+    setUploadedFileName(file.name);
+    
+    toast({
+      title: "Video selected",
+      description: `File: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`,
+    });
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleFileSelect(files[0]);
+    }
   };
 
   return (
@@ -147,6 +209,42 @@ export function UploadVideoModal({ open, onOpenChange }: UploadVideoModalProps) 
             />
           </div>
 
+          {/* Drag and Drop Area */}
+          <div className="space-y-2">
+            <Label>Upload Video *</Label>
+            <div
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                isDragging
+                  ? 'border-primary bg-primary/5'
+                  : 'border-muted-foreground/25 hover:border-primary/50'
+              }`}
+              onClick={() => fileInputRef.current?.click()}
+              data-testid="drop-zone-video"
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="video/*"
+                onChange={handleFileInputChange}
+                className="hidden"
+                data-testid="input-video-file"
+              />
+              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+              <p className="font-medium">Drag and drop your video here</p>
+              <p className="text-sm text-muted-foreground mt-1">or click to browse your files</p>
+              <p className="text-xs text-muted-foreground mt-2">Supported formats: MP4, WebM, MOV, etc.</p>
+              {uploadedFileName && (
+                <p className="text-sm text-green-600 dark:text-green-400 mt-2">
+                  ✓ Selected: {uploadedFileName}
+                </p>
+              )}
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="url">Video URL *</Label>
@@ -160,7 +258,7 @@ export function UploadVideoModal({ open, onOpenChange }: UploadVideoModalProps) 
                 placeholder="https://..."
               />
               <p className="text-xs text-muted-foreground">
-                YouTube, Vimeo, or direct video URL
+                YouTube, Vimeo, or direct video URL (auto-filled if uploaded above)
               </p>
             </div>
             <div className="space-y-2">
@@ -174,7 +272,7 @@ export function UploadVideoModal({ open, onOpenChange }: UploadVideoModalProps) 
                 placeholder="https://..."
               />
               <p className="text-xs text-muted-foreground">
-                Cover image for the video
+                Cover image for the video (optional)
               </p>
             </div>
           </div>
