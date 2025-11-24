@@ -11,42 +11,42 @@ interface StatCardProps {
 
 const colorSchemes = {
   red: {
-    bg: 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/30',
+    bg: 'bg-red-50 dark:bg-red-900/20',
     icon: 'text-red-600 dark:text-red-400',
     text: 'text-red-900 dark:text-red-100',
     badge: 'text-red-700 dark:text-red-300'
   },
   purple: {
-    bg: 'bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30',
+    bg: 'bg-purple-50 dark:bg-purple-900/20',
     icon: 'text-purple-600 dark:text-purple-400',
     text: 'text-purple-900 dark:text-purple-100',
     badge: 'text-purple-700 dark:text-purple-300'
   },
   orange: {
-    bg: 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30',
+    bg: 'bg-orange-50 dark:bg-orange-900/20',
     icon: 'text-orange-600 dark:text-orange-400',
     text: 'text-orange-900 dark:text-orange-100',
     badge: 'text-orange-700 dark:text-orange-300'
   },
   green: {
-    bg: 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30',
+    bg: 'bg-green-50 dark:bg-green-900/20',
     icon: 'text-green-600 dark:text-green-400',
     text: 'text-green-900 dark:text-green-100',
     badge: 'text-green-700 dark:text-green-300'
   },
   pink: {
-    bg: 'bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/30 dark:to-pink-800/30',
+    bg: 'bg-pink-50 dark:bg-pink-900/20',
     icon: 'text-pink-600 dark:text-pink-400',
     text: 'text-pink-900 dark:text-pink-100',
     badge: 'text-pink-700 dark:text-pink-300'
   },
   cyan: {
-    bg: 'bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-900/30 dark:to-cyan-800/30',
+    bg: 'bg-cyan-50 dark:bg-cyan-900/20',
     icon: 'text-cyan-600 dark:text-cyan-400',
     text: 'text-cyan-900 dark:text-cyan-100',
     badge: 'text-cyan-700 dark:text-cyan-300'
   }
-};
+} as const;
 
 export function StatCard({ 
   title, 
@@ -54,13 +54,13 @@ export function StatCard({
   icon: Icon, 
   trend, 
   trendUp,
-  colorScheme = 'blue'
+  colorScheme = 'red'
 }: StatCardProps) {
-  const colors = colorSchemes[colorScheme];
+  const colors = colorSchemes[colorScheme] || colorSchemes.red;
   
   return (
     <div 
-      className={`${colors.bg} rounded-lg p-6 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 transition-all hover-elevate`}
+      className={`${colors.bg} rounded-lg p-6 border border-gray-100 dark:border-gray-800 transition-all hover-elevate`}
       data-testid={`card-stat-${title.toLowerCase().replace(/\s+/g, '-')}`}
     >
       <div className="flex items-start justify-between mb-4">
