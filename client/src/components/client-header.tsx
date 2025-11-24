@@ -14,7 +14,7 @@ import { useLanguage } from "@/lib/language-context";
 import { queryClient } from "@/lib/queryClient";
 import { useState } from "react";
 import logoImage from "@assets/TWWLOGO_1763965276890.png";
-import { TrainerContactDialog } from "@/components/trainer-contact-dialog";
+import { TrainerContactDropdown } from "@/components/trainer-contact-dialog";
 
 interface ClientHeaderProps {
   currentPage?: 'dashboard' | 'workouts' | 'videos' | 'diet' | 'sessions' | 'history' | 'workout-history' | 'progress' | 'profile' | 'weight-tracking' | 'body-measurements' | 'weekly-completion' | 'achievements' | 'achievement-gallery' | 'personal-records' | 'monthly-reports' | 'goals' | 'calculators' | 'calendar' | 'messages' | 'support-tickets' | 'announcements' | 'forum';
@@ -25,7 +25,6 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
   const [, setLocation] = useLocation();
   const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [contactDialogOpen, setContactDialogOpen] = useState(false);
   
   // Check if client has Pro or Elite package
   const isProOrElite = packageName && (packageName.toLowerCase().includes('pro') || packageName.toLowerCase().includes('elite'));

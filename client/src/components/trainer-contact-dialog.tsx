@@ -1,15 +1,19 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Phone, MessageCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 
-interface TrainerContactDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+interface TrainerContactDropdownProps {
+  isProOrElite: boolean;
 }
 
-export function TrainerContactDialog({ open, onOpenChange }: TrainerContactDialogProps) {
+export function TrainerContactDropdown({ isProOrElite }: TrainerContactDropdownProps) {
   const [trainerPhone, setTrainerPhone] = useState<string | null>(null);
   const [trainerName, setTrainerName] = useState<string>("");
   const [clientId, setClientId] = useState<string | null>(null);
@@ -21,12 +25,12 @@ export function TrainerContactDialog({ open, onOpenChange }: TrainerContactDialo
 
   const { data: clientData } = useQuery<any>({
     queryKey: ["/api/client-profile", clientId],
-    enabled: !!clientId && open,
+    enabled: !!clientId && isProOrElite,
   });
 
   const { data: trainerData } = useQuery<any>({
     queryKey: ["/api/trainer", clientData?.trainerId],
-    enabled: !!clientData?.trainerId && open,
+    enabled: !!clientData?.trainerId && isProOrElite,
   });
 
   useEffect(() => {
@@ -42,60 +46,53 @@ export function TrainerContactDialog({ open, onOpenChange }: TrainerContactDialo
     if (trainerPhone) {
       // Open phone dialer with trainer's number
       window.location.href = `tel:+${trainerPhone}`;
-      onOpenChange(false);
     }
   };
 
-  const handleWhatsApp = () => {
+  const handleMessage = () => {
     if (trainerPhone) {
       // Open WhatsApp with trainer's number
       const whatsappUrl = `https://wa.me/${trainerPhone}?text=Hi%20${encodeURIComponent(trainerName)}`;
       window.open(whatsappUrl, "_blank");
-      onOpenChange(false);
     }
   };
 
+  if (!isProOrElite) {
+    return null;
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Contact {trainerName}</DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-col gap-4 py-4">
-          {trainerPhone ? (
-            <>
-              <p className="text-sm text-muted-foreground">
-                Trainer Phone: <span className="font-semibold text-foreground">+{trainerPhone}</span>
-              </p>
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleCall}
-                  className="flex-1 gap-2"
-                  size="lg"
-                  data-testid="button-call-trainer"
-                >
-                  <Phone className="h-4 w-4" />
-                  Call
-                </Button>
-                <Button
-                  onClick={handleWhatsApp}
-                  variant="outline"
-                  className="flex-1 gap-2"
-                  size="lg"
-                  data-testid="button-whatsapp-trainer"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  WhatsApp
-                </Button>
-              </div>
-            </>
-          ) : (
-            <p className="text-sm text-muted-foreground text-center py-4">
-              Trainer contact information not available
-            </p>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button 
+          variant="ghost" 
+          size="icon"
+          data-testid="button-call-trainer"
+          title="Contact Trainer"
+        >
+          <Phone className="h-5 w-5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuItem
+          onClick={handleCall}
+          disabled={!trainerPhone}
+          className="cursor-pointer gap-2"
+          data-testid="dropdown-call"
+        >
+          <Phone className="h-4 w-4" />
+          <span>Call</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleMessage}
+          disabled={!trainerPhone}
+          className="cursor-pointer gap-2"
+          data-testid="dropdown-message"
+        >
+          <MessageCircle className="h-4 w-4" />
+          <span>Message</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
