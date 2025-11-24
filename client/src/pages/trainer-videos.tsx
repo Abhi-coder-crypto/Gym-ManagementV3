@@ -5,14 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Video as VideoIcon, Clock, Eye, Play } from "lucide-react";
+import { Search, Video as VideoIcon, Clock, Eye, Play, Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import type { Video as VideoType } from "@shared/schema";
 import { useState } from "react";
 import { VideoPlayerModal } from "@/components/video-player-modal";
+import { UploadVideoModal } from "@/components/upload-video-modal";
 
 export default function TrainerVideos() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const [playingVideo, setPlayingVideo] = useState<{ url: string; title: string } | null>(null);
   
   const style = {
@@ -43,7 +45,10 @@ export default function TrainerVideos() {
               </h1>
             </div>
             <div className="flex items-center gap-2">
-              <Button data-testid="button-upload-video">Upload Video</Button>
+              <Button onClick={() => setShowUploadModal(true)} data-testid="button-upload-video">
+                <Plus className="h-4 w-4 mr-2" />
+                Upload Video
+              </Button>
               <ThemeToggle />
             </div>
           </header>
@@ -188,6 +193,12 @@ export default function TrainerVideos() {
           </main>
         </div>
       </div>
+
+      {/* Upload Video Modal */}
+      <UploadVideoModal
+        open={showUploadModal}
+        onOpenChange={setShowUploadModal}
+      />
     </SidebarProvider>
   );
 }

@@ -304,8 +304,8 @@ export default function AdminVideos() {
 
       {/* Upload Video Modal */}
       <UploadVideoModal
-        isOpen={showUploadModal}
-        onClose={() => setShowUploadModal(false)}
+        open={showUploadModal}
+        onOpenChange={setShowUploadModal}
       />
 
       {/* Edit Video Modal */}
