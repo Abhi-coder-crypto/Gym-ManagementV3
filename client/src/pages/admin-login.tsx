@@ -5,40 +5,24 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Shield, User } from "lucide-react";
+import { ArrowLeft, Shield } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import logoImage from "@assets/TWWLOGO_1763965276890.png";
 import bgImage from "@assets/admin_log_1763968144242.jpg";
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState<"admin" | "trainer">("admin");
-  
-  // Separate state for admin credentials
-  const [adminEmail, setAdminEmail] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
-  
-  // Separate state for trainer credentials
-  const [trainerEmail, setTrainerEmail] = useState("");
-  const [trainerPassword, setTrainerPassword] = useState("");
-  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleLogin = async (e: React.FormEvent, role: "admin" | "trainer") => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Use credentials based on the role/tab
-    const email = role === "admin" ? adminEmail : trainerEmail;
-    const password = role === "admin" ? adminPassword : trainerPassword;
-    
-    // Use role-specific login endpoints
-    const endpoint = role === "admin" ? '/api/admin/login' : '/api/trainer/login';
-    
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,21 +36,11 @@ export default function AdminLogin() {
         throw new Error(data.message || 'Login failed');
       }
 
-      // Backend sets HTTP-only cookie automatically, just redirect
-      // Frontend will query /api/auth/me to get current user
-      if (role === 'admin') {
-        toast({
-          title: "Login successful",
-          description: "Welcome to FitPro Admin Dashboard",
-        });
-        setLocation("/admin/dashboard");
-      } else if (role === 'trainer') {
-        toast({
-          title: "Login successful",
-          description: "Welcome to FitPro Trainer Dashboard",
-        });
-        setLocation("/trainer/dashboard");
-      }
+      toast({
+        title: "Login successful",
+        description: "Welcome to FitPro Admin Dashboard",
+      });
+      setLocation("/admin/dashboard");
     } catch (error: any) {
       toast({
         title: "Login failed",
@@ -122,128 +96,62 @@ export default function AdminLogin() {
               <Shield className="h-8 w-8 text-primary" />
             </div>
             <div className="text-center">
-              <CardTitle className="text-2xl font-display">Staff Login</CardTitle>
+              <CardTitle className="text-2xl font-display">Admin Login</CardTitle>
               <CardDescription className="mt-2">
-                Admin and Trainer access to FitPro dashboard
+                Access the FitPro admin dashboard
               </CardDescription>
             </div>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="admin" className="w-full" onValueChange={(value) => setActiveTab(value as "admin" | "trainer")}>
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="admin" data-testid="tab-admin">
-                  <Shield className="h-4 w-4 mr-2" />
-                  Admin
-                </TabsTrigger>
-                <TabsTrigger value="trainer" data-testid="tab-trainer">
-                  <User className="h-4 w-4 mr-2" />
-                  Trainer
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="admin">
-                <form onSubmit={(e) => handleLogin(e, "admin")} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="admin-email">Email</Label>
-                    <Input
-                      id="admin-email"
-                      type="email"
-                      placeholder="admin@fitpro.com"
-                      value={adminEmail}
-                      onChange={(e) => setAdminEmail(e.target.value)}
-                      data-testid="input-email"
-                      autoFocus
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="admin-password">Password</Label>
-                    <Input
-                      id="admin-password"
-                      type="password"
-                      placeholder="Enter admin password"
-                      value={adminPassword}
-                      onChange={(e) => setAdminPassword(e.target.value)}
-                      data-testid="input-password"
-                      required
-                    />
-                    <p className="text-sm text-muted-foreground">
-                      Demo: admin@fitpro.com / Admin@123
-                    </p>
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isLoading || !adminEmail || !adminPassword}
-                    data-testid="button-login"
-                  >
-                    {isLoading ? "Logging in..." : "Login as Admin"}
-                  </Button>
-                  <div className="text-center">
-                    <Button
-                      variant="ghost"
-                      type="button"
-                      className="text-sm"
-                      onClick={() => setLocation("/admin/forgot-password")}
-                      data-testid="link-forgot-password"
-                    >
-                      Forgot Password?
-                    </Button>
-                  </div>
-                </form>
-              </TabsContent>
-              
-              <TabsContent value="trainer">
-                <form onSubmit={(e) => handleLogin(e, "trainer")} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="trainer-email">Email</Label>
-                    <Input
-                      id="trainer-email"
-                      type="email"
-                      placeholder="trainer@fitpro.com"
-                      value={trainerEmail}
-                      onChange={(e) => setTrainerEmail(e.target.value)}
-                      data-testid="input-trainer-email"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="trainer-password">Password</Label>
-                    <Input
-                      id="trainer-password"
-                      type="password"
-                      placeholder="Enter trainer password"
-                      value={trainerPassword}
-                      onChange={(e) => setTrainerPassword(e.target.value)}
-                      data-testid="input-trainer-password"
-                      required
-                    />
-                    <p className="text-sm text-muted-foreground">
-                      Demo: trainer@fitpro.com / Trainer@123
-                    </p>
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isLoading || !trainerEmail || !trainerPassword}
-                    data-testid="button-trainer-login"
-                  >
-                    {isLoading ? "Logging in..." : "Login as Trainer"}
-                  </Button>
-                  <div className="text-center">
-                    <Button
-                      variant="ghost"
-                      type="button"
-                      className="text-sm"
-                      onClick={() => setLocation("/admin/forgot-password")}
-                      data-testid="link-forgot-password-trainer"
-                    >
-                      Forgot Password?
-                    </Button>
-                  </div>
-                </form>
-              </TabsContent>
-            </Tabs>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="admin@fitpro.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  data-testid="input-email"
+                  autoFocus
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter admin password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  data-testid="input-password"
+                  required
+                />
+                <p className="text-sm text-muted-foreground">
+                  Demo: admin@fitpro.com / Admin@123
+                </p>
+              </div>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isLoading || !email || !password}
+                data-testid="button-login"
+              >
+                {isLoading ? "Logging in..." : "Login as Admin"}
+              </Button>
+              <div className="text-center">
+                <Button
+                  variant="ghost"
+                  type="button"
+                  className="text-sm"
+                  onClick={() => setLocation("/admin/forgot-password")}
+                  data-testid="link-forgot-password"
+                >
+                  Forgot Password?
+                </Button>
+              </div>
+            </form>
           </CardContent>
         </Card>
         </div>
