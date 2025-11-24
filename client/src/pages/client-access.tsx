@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { ArrowLeft, Eye, EyeOff, KeyRound } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, KeyRound, Lock } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import backgroundImage from "@assets/cleint_login_1763960397741.jpg";
 import logoImage from "@assets/TWWLOGO_1763965276890.png";
@@ -92,7 +92,7 @@ export default function ClientAccess() {
       <header className="absolute top-0 left-0 right-0 z-10">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
+            <img src={logoImage} alt="FitPro" className="h-20 w-20 object-contain" />
             <span className="text-2xl font-display font-bold tracking-tight text-white hidden sm:inline">
               FitPro
             </span>
@@ -114,10 +114,7 @@ export default function ClientAccess() {
 
       <main className="relative z-10 min-h-screen flex items-center justify-center px-6">
         <Card className="w-full max-w-sm shadow-lg">
-          <CardHeader className="space-y-3 pb-4">
-            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue-600 mx-auto">
-              <img src={logoImage} alt="FitPro" className="h-14 w-14 object-contain" />
-            </div>
+          <CardHeader className="space-y-2 pb-3">
             <div className="text-center">
               <CardTitle className="text-xl font-display">Client Login</CardTitle>
               <CardDescription className="text-xs mt-1">
