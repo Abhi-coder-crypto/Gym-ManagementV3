@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator } from "lucide-react";
+import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator, LayoutDashboard, Flame } from "lucide-react";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/lib/language-context";
 import { queryClient } from "@/lib/queryClient";
@@ -32,7 +32,7 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
   };
 
   return (
-    <header className="border-b">
+    <header className="border-b-4 border-b-amber-500 dark:border-b-amber-600">
       <div className="container mx-auto px-6 py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Logo and Back Button */}
@@ -60,43 +60,48 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
             <Button 
               variant="ghost" 
-              className={currentPage === 'dashboard' ? 'bg-accent' : ''} 
+              className={currentPage === 'dashboard' ? 'border-b-4 border-b-blue-500 rounded-none' : ''} 
               onClick={() => setLocation("/client")}
               data-testid="link-dashboard"
             >
+              <LayoutDashboard className="h-4 w-4 mr-2 text-blue-600" />
               {t('nav.dashboard')}
             </Button>
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'sessions' ? 'bg-accent' : ''} 
+              className={currentPage === 'sessions' ? 'border-b-4 border-b-purple-500 rounded-none' : ''} 
               onClick={() => setLocation("/client/sessions")}
               data-testid="link-sessions"
             >
+              <Calendar className="h-4 w-4 mr-2 text-purple-600" />
               {t('nav.liveSessions')}
             </Button>
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'videos' ? 'bg-accent' : ''} 
+              className={currentPage === 'videos' ? 'border-b-4 border-b-red-500 rounded-none' : ''} 
               onClick={() => setLocation("/client/videos")}
               data-testid="link-videos"
             >
+              <Video className="h-4 w-4 mr-2 text-red-600" />
               {t('nav.videoLibrary')}
             </Button>
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'diet' ? 'bg-accent' : ''} 
+              className={currentPage === 'diet' ? 'border-b-4 border-b-orange-500 rounded-none' : ''} 
               onClick={() => setLocation("/client/diet")}
               data-testid="link-diet"
             >
+              <UtensilsCrossed className="h-4 w-4 mr-2 text-orange-600" />
               Diet & Meal Plans
             </Button>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={['weight-tracking', 'body-measurements', 'achievements', 'personal-records', 'monthly-reports', 'progress', 'goals'].includes(currentPage || '') ? 'bg-accent' : ''} data-testid="dropdown-progress">
+                <Button variant="ghost" className={['weight-tracking', 'body-measurements', 'achievements', 'personal-records', 'monthly-reports', 'progress', 'goals'].includes(currentPage || '') ? 'border-b-4 border-b-green-500 rounded-none' : ''} data-testid="dropdown-progress">
+                  <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
                   {t('nav.progressAnalytics')}
                   <ChevronDown className="h-4 w-4 ml-1" />
                 </Button>
