@@ -39,9 +39,9 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
   return (
     <header className="border-b-4 border-b-amber-500 dark:border-b-amber-600">
       <div className="container mx-auto px-6 py-3">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-2">
           {/* Logo and Back Button */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 flex-shrink-0">
             {showBackButton() && (
               <button 
                 onClick={() => history.back()} 
@@ -53,61 +53,65 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
             )}
             <button 
               onClick={() => setLocation("/client")} 
-              className="flex items-center gap-2 hover-elevate active-elevate-2 rounded-md px-2 py-1 flex-shrink-0"
+              className="flex items-center gap-1 hover-elevate active-elevate-2 rounded-md px-1 py-1 flex-shrink-0"
               data-testid="button-logo-home"
             >
-              <img src={logoImage} alt="FitPro" className="h-20 w-20 object-contain" />
-              <span className="text-2xl font-display font-bold tracking-tight hidden sm:inline">FitPro</span>
+              <img src={logoImage} alt="FitPro" className="h-16 w-16 object-contain" />
+              <span className="text-lg font-display font-bold tracking-tight hidden lg:inline">FitPro</span>
             </button>
           </div>
 
           {/* Main Navigation */}
-          <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
+          <nav className="hidden lg:flex items-center gap-0 flex-1 justify-start pl-2">
             <Button 
               variant="ghost" 
-              className={currentPage === 'dashboard' ? 'nav-underline-blue' : ''} 
+              className={`${currentPage === 'dashboard' ? 'nav-underline-blue' : ''} px-2`}
               onClick={() => setLocation("/client")}
               data-testid="link-dashboard"
+              size="sm"
             >
-              <LayoutDashboard className="h-4 w-4 mr-2 text-blue-600" />
-              {t('nav.dashboard')}
+              <LayoutDashboard className="h-4 w-4 mr-1 text-blue-600" />
+              <span className="hidden xl:inline">Dashboard</span>
             </Button>
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'sessions' ? 'nav-underline-purple' : ''} 
+              className={`${currentPage === 'sessions' ? 'nav-underline-purple' : ''} px-2`}
               onClick={() => setLocation("/client/sessions")}
               data-testid="link-sessions"
+              size="sm"
             >
-              <Calendar className="h-4 w-4 mr-2 text-purple-600" />
-              {t('nav.liveSessions')}
+              <Calendar className="h-4 w-4 mr-1 text-purple-600" />
+              <span className="hidden xl:inline">Sessions</span>
             </Button>
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'videos' ? 'nav-underline-red' : ''} 
+              className={`${currentPage === 'videos' ? 'nav-underline-red' : ''} px-2`}
               onClick={() => setLocation("/client/videos")}
               data-testid="link-videos"
+              size="sm"
             >
-              <Video className="h-4 w-4 mr-2 text-red-600" />
-              {t('nav.videoLibrary')}
+              <Video className="h-4 w-4 mr-1 text-red-600" />
+              <span className="hidden xl:inline">Videos</span>
             </Button>
 
             <Button 
               variant="ghost" 
-              className={currentPage === 'diet' ? 'nav-underline-orange' : ''} 
+              className={`${currentPage === 'diet' ? 'nav-underline-orange' : ''} px-2`}
               onClick={() => setLocation("/client/diet")}
               data-testid="link-diet"
+              size="sm"
             >
-              <UtensilsCrossed className="h-4 w-4 mr-2 text-orange-600" />
-              Diet & Meal Plans
+              <UtensilsCrossed className="h-4 w-4 mr-1 text-orange-600" />
+              <span className="hidden xl:inline">Diet</span>
             </Button>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={['weight-tracking', 'body-measurements', 'achievements', 'personal-records', 'monthly-reports', 'progress', 'goals'].includes(currentPage || '') ? 'nav-underline-green' : ''} data-testid="dropdown-progress">
-                  <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
-                  {t('nav.progressAnalytics')}
+                <Button variant="ghost" className={`${['weight-tracking', 'body-measurements', 'achievements', 'personal-records', 'monthly-reports', 'progress', 'goals'].includes(currentPage || '') ? 'nav-underline-green' : ''} px-2`} data-testid="dropdown-progress" size="sm">
+                  <TrendingUp className="h-4 w-4 mr-1 text-green-600" />
+                  <span className="hidden xl:inline">Progress</span>
                   <ChevronDown className="h-4 w-4 ml-1" />
                 </Button>
               </DropdownMenuTrigger>
@@ -157,7 +161,7 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
           </button>
 
           {/* Icon Buttons */}
-          <div className="hidden md:flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-1 flex-shrink-0">
             <SessionReminders />
             <ThemeToggle />
             <TrainerContactDropdown isProOrElite={isProOrElite} />
