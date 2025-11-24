@@ -17,7 +17,7 @@ import logoImage from "@assets/TWWLOGO_1763965276890.png";
 import { TrainerContactDropdown } from "@/components/trainer-contact-dialog";
 
 interface ClientHeaderProps {
-  currentPage?: 'dashboard' | 'workouts' | 'videos' | 'diet' | 'sessions' | 'history' | 'workout-history' | 'progress' | 'profile' | 'weight-tracking' | 'body-measurements' | 'weekly-completion' | 'achievements' | 'achievement-gallery' | 'personal-records' | 'monthly-reports' | 'goals' | 'calculators' | 'calendar' | 'messages' | 'support-tickets' | 'announcements' | 'forum';
+  currentPage?: 'dashboard' | 'workouts' | 'videos' | 'diet' | 'sessions' | 'history' | 'workout-history' | 'progress' | 'progress-photos' | 'profile' | 'weight-tracking' | 'body-measurements' | 'weekly-completion' | 'achievements' | 'achievement-gallery' | 'personal-records' | 'monthly-reports' | 'goals' | 'calculators' | 'calendar' | 'messages' | 'support-tickets' | 'announcements' | 'forum';
   packageName?: string;
 }
 
@@ -27,7 +27,7 @@ export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Check if client has Pro or Elite package
-  const isProOrElite = packageName && (packageName.toLowerCase().includes('pro') || packageName.toLowerCase().includes('elite'));
+  const isProOrElite = !!(packageName && (packageName.toLowerCase().includes('pro') || packageName.toLowerCase().includes('elite')));
 
 
   const [location] = useLocation();

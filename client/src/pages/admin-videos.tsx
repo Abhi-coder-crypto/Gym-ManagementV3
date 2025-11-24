@@ -311,8 +311,8 @@ export default function AdminVideos() {
       {/* Edit Video Modal */}
       {selectedVideo && (
         <EditVideoModal
-          isOpen={showEditModal}
-          onClose={() => {
+          open={showEditModal}
+          onOpenChange={() => {
             setShowEditModal(false);
             setSelectedVideo(null);
           }}
@@ -322,8 +322,8 @@ export default function AdminVideos() {
 
       {/* Assign Video Dialog */}
       <AssignVideoDialog
-        isOpen={showAssignDialog}
-        onClose={() => setShowAssignDialog(false)}
+        open={showAssignDialog}
+        onOpenChange={() => setShowAssignDialog(false)}
         videoId={assignVideoId}
         videoTitle={assignVideoTitle}
       />
