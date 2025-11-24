@@ -73,15 +73,17 @@ export default function ClientWeightTracking() {
     updateGoalMutation.mutate({ goalWeight: parseFloat(goalWeight) });
   };
 
+  const weightLost = Math.max(0, startWeight - currentWeight);
+
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <ClientHeader currentPage="weight-tracking" />
       <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Header */}
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Weight Tracking</h1>
-            <p className="text-muted-foreground mt-2">Monitor your progress towards your fitness goals</p>
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-6 shadow-sm">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Weight Tracking</h1>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">Monitor your progress towards your fitness goals</p>
           </div>
 
           {/* Main Stats Cards */}

@@ -67,17 +67,18 @@ export default function ClientPersonalRecords() {
   const records = recordsData?.records || [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-yellow-50 via-lime-50 to-green-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <ClientHeader currentPage="personal-records" />
-      <main className="flex-1 container mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-display font-bold tracking-tight mb-2">Personal Records</h1>
-          <p className="text-muted-foreground">
-            Track your best lifts, fastest runs, and longest holds
-          </p>
-        </div>
+      <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto space-y-6">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-6 shadow-sm">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold tracking-tight">Personal Records</h1>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+              Track your best lifts, fastest runs, and longest holds
+            </p>
+          </div>
 
-        <Card className="mb-8">
+          <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Plus className="h-5 w-5" />
@@ -193,6 +194,7 @@ export default function ClientPersonalRecords() {
             })}
           </div>
         )}
+        </div>
       </main>
     </div>
   );

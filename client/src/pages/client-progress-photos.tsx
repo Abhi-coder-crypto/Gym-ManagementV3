@@ -137,15 +137,15 @@ export default function ClientProgressPhotos() {
   if (!clientId) return null;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 via-violet-50 to-fuchsia-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <ClientHeader currentPage="progress" />
 
-      <main className="flex-1 py-8">
-        <div className="container mx-auto px-6 space-y-8">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
+      <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-6 shadow-sm flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <h1 className="text-3xl font-display font-bold tracking-tight">Progress Photos</h1>
-              <p className="text-muted-foreground mt-1">
+              <h1 className="text-2xl sm:text-3xl font-display font-bold tracking-tight">Progress Photos</h1>
+              <p className="text-muted-foreground mt-1 text-sm sm:text-base">
                 Track your transformation with before and after photos
               </p>
             </div>

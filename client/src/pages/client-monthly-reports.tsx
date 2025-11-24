@@ -31,17 +31,18 @@ export default function ClientMonthlyReports() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <ClientHeader currentPage="monthly-reports" />
-      <main className="flex-1 container mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-display font-bold tracking-tight mb-2">Monthly Reports</h1>
-          <p className="text-muted-foreground">
-            Comprehensive summaries of your fitness progress and activities
-          </p>
-        </div>
+      <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-6 shadow-sm">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold tracking-tight">Monthly Reports</h1>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+              Comprehensive summaries of your fitness progress and activities
+            </p>
+          </div>
 
-        <Card className="mb-8">
+          <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -151,6 +152,7 @@ export default function ClientMonthlyReports() {
             )}
           </CardContent>
         </Card>
+        </div>
       </main>
     </div>
   );

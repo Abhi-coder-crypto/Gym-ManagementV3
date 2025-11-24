@@ -42,14 +42,14 @@ export default function ClientProgressCharts() {
   const isWeightLoss = weightChange < 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <ClientHeader currentPage="progress-charts" />
       <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Progress Analytics</h1>
-            <p className="text-muted-foreground mt-2">Track your fitness journey with detailed charts and insights</p>
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-6 shadow-sm">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Progress Analytics</h1>
+            <p className="text-muted-foreground mt-1 text-sm sm:text-base">Track your fitness journey with detailed charts and insights</p>
           </div>
 
           {/* Key Metrics */}
