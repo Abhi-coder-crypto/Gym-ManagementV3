@@ -16,7 +16,12 @@ export default function TrainerDashboard() {
   };
 
   const { data: authData } = useQuery<any>({
-    queryKey: ['auth', 'trainer']
+    queryKey: ['auth', 'trainer'],
+    queryFn: async () => {
+      const response = await fetch('/api/auth/me?role=trainer');
+      if (!response.ok) throw new Error('Failed to fetch auth');
+      return response.json();
+    }
   });
 
   const user = authData?.user;

@@ -17,7 +17,12 @@ export default function AdminDashboard() {
   };
 
   const { data: authData } = useQuery<any>({
-    queryKey: ['auth', 'admin']
+    queryKey: ['auth', 'admin'],
+    queryFn: async () => {
+      const response = await fetch('/api/auth/me?role=admin');
+      if (!response.ok) throw new Error('Failed to fetch auth');
+      return response.json();
+    }
   });
 
   const user = authData?.user;

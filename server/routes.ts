@@ -533,6 +533,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Not authenticated" });
       }
       
+      // Check if a specific role was requested
+      const requestedRole = req.query.role as string;
+      if (requestedRole && req.user.role !== requestedRole) {
+        // Role mismatch - user token is for a different role
+        return res.status(401).json({ 
+          message: "Role mismatch. Invalid authentication for this dashboard." 
+        });
+      }
+      
       const user = await storage.getUserById(req.user.userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
