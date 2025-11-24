@@ -8,21 +8,27 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator, LayoutDashboard, Flame, Zap, Target, Camera, BarChart3, LogOut } from "lucide-react";
+import { Calendar, Video, UtensilsCrossed, User, ChevronDown, TrendingUp, Scale, Ruler, Trophy, FileText, Image, Menu, X, ArrowLeft, Calculator, LayoutDashboard, Flame, Zap, Target, Camera, BarChart3, LogOut, Phone } from "lucide-react";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/lib/language-context";
 import { queryClient } from "@/lib/queryClient";
 import { useState } from "react";
 import logoImage from "@assets/TWWLOGO_1763965276890.png";
+import { TrainerContactDialog } from "@/components/trainer-contact-dialog";
 
 interface ClientHeaderProps {
   currentPage?: 'dashboard' | 'workouts' | 'videos' | 'diet' | 'sessions' | 'history' | 'workout-history' | 'progress' | 'profile' | 'weight-tracking' | 'body-measurements' | 'weekly-completion' | 'achievements' | 'achievement-gallery' | 'personal-records' | 'monthly-reports' | 'goals' | 'calculators' | 'calendar' | 'messages' | 'support-tickets' | 'announcements' | 'forum';
+  packageName?: string;
 }
 
-export function ClientHeader({ currentPage }: ClientHeaderProps) {
+export function ClientHeader({ currentPage, packageName }: ClientHeaderProps) {
   const [, setLocation] = useLocation();
   const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [contactDialogOpen, setContactDialogOpen] = useState(false);
+  
+  // Check if client has Pro or Elite package
+  const isProOrElite = packageName && (packageName.toLowerCase().includes('pro') || packageName.toLowerCase().includes('elite'));
 
 
   const [location] = useLocation();
@@ -155,6 +161,17 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
           <div className="hidden md:flex items-center gap-1 flex-shrink-0">
             <SessionReminders />
             <ThemeToggle />
+            {isProOrElite && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setContactDialogOpen(true)}
+                data-testid="button-call-trainer"
+                title="Contact Trainer"
+              >
+                <Phone className="h-5 w-5" />
+              </Button>
+            )}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -176,6 +193,9 @@ export function ClientHeader({ currentPage }: ClientHeaderProps) {
               <LogOut className="h-5 w-5" />
             </Button>
           </div>
+        </div>
+
+        <TrainerContactDialog open={contactDialogOpen} onOpenChange={setContactDialogOpen}
         </div>
 
         {/* Mobile Navigation Menu */}
